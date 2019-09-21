@@ -86,15 +86,16 @@ int main() {
     f = open_file(words_filename);
     while (~fscanf(f, "%s", temp)) {
         ++word_number;
-        if (word_number % 10000 == 0)
-            printf("%d %fs\n", word_number,
-                   (double)(clock() - start) / CLOCKS_PER_SEC);
+        // if (word_number % 10000 == 0)
+        //     printf("%d %fs %d ok\n", word_number,
+        //            (double)(clock() - start) / CLOCKS_PER_SEC,
+        //            word_exist_number);
 
         if (ht_exist(ht, temp)) {
             ++word_exist_number;
-            // printf("%s yes\n", temp);
+            printf("%s yes\n", temp);
         } else {
-            // printf("%s no\n", temp);
+            printf("%s no\n", temp);
         }
     }
     fclose(f);
