@@ -1,0 +1,6 @@
+#include "./boolean/boolean.h"
+#include "./compare/compare.h"
+#include "./file/file.h"
+#include "./free/free.h"
+#include "./link/link.h"
+#include "./print/print.h"
