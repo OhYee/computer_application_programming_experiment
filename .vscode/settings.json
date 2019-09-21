@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "utils.h": "c",
+        "stdio.h": "c",
+        "free.h": "c",
+        "link.h": "c",
+        "print.h": "c",
+        "boolean.h": "c"
+    }
+}

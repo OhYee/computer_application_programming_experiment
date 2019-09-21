@@ -1,0 +1,6 @@
+*.d
+*.o
+*.out
+*/testcase/*
+!*/testcase/patterns*.txt
+!*/testcase/words*.txt
