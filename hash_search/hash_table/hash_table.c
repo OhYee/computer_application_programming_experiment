@@ -24,8 +24,12 @@ typedef struct ht {
 int hash(char *s, int limit) {
     unsigned int code = 0;
     char *       ptr = s;
+
+    int param = 1;
     while (!compare_char(*ptr, '\0')) {
-        code = code ^ (*ptr);
+        // code = code ^ (*ptr);
+        code += (param * (*ptr)) % limit;
+        param = (param << 2) % limit;
         ++ptr;
     }
     code = (code * 999983) % limit;
@@ -79,8 +83,7 @@ int main() {
     fclose(f);
 
     // for (int i = 0; i < (ht->length); ++i) {
-    //     printf("%d %d\n", i, ht->array[i] == NULL ? 0 :
-    //     ht->array[i]->length);
+    //     printf("%d %d\n", i, ht->array[i] == NULL ? 0 : ht->array[i]->length);
     // }
 
     f = open_file(words_filename);
