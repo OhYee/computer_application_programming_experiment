@@ -1,6 +1,7 @@
 *.d
 *.o
 *.out
+*.txt
 */testcase/*
 !*/testcase/patterns*.txt
 !*/testcase/words*.txt
