@@ -1,0 +1,3 @@
+build:boolean
+
+boolean.o:
