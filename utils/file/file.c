@@ -8,3 +8,23 @@ FILE *open_file(const char *filename) {
     }
     return f;
 }
+
+boolean read(FILE *f, char *s) {
+    char *ptr = s;
+    char  c;
+
+    while (1) {
+        c = fgetc(f);
+        if (c == EOF) {
+            return F;
+        }
+        if (c == '\n') {
+            if (ptr == s) {
+                continue;
+            }
+            *(ptr) = '\0';
+            return T;
+        }
+        *(ptr++) = c;
+    }
+}
