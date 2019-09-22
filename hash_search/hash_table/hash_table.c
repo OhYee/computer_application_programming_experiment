@@ -2,11 +2,11 @@
 #include <memory.h>
 #include <time.h>
 
-const char *patterns_filename = "../testcase/patterns-127w_2.txt";
-const char *words_filename = "../testcase/words-98w.txt";
-const int   max_pattern_number = 1280000;
-const int   max_string_length = 100;
-const int   memory_length =
+const char *       patterns_filename = "../testcase/patterns-127w_2.txt";
+const char *       words_filename = "../testcase/words-98w.txt";
+const int          max_pattern_number = 1280000;
+const int          max_string_length = 256;
+const unsigned int memory_length =
     max_pattern_number *
         (sizeof(link *) + sizeof(linked_node) + max_string_length) +
     10000;
@@ -68,7 +68,7 @@ boolean ht_exist(hash_table *ht, char *s) {
 }
 
 int main() {
-    time_t start = clock();
+    clock_start();
 
     mp_init(memory_length, mp_exit);
     hash_table *ht = ht_init(10000);
@@ -77,21 +77,22 @@ int main() {
     int         word_exist_number = 0;
 
     FILE *f = open_file(patterns_filename);
-    while (~fscanf(f, "%s", temp)) {
+
+    while (read(f, temp)) {
         ht_add(ht, temp);
     }
     fclose(f);
 
     // for (int i = 0; i < (ht->length); ++i) {
-    //     printf("%d %d\n", i, ht->array[i] == NULL ? 0 : ht->array[i]->length);
+    //     printf("%d %d\n", i, ht->array[i] == NULL ? 0 :
+    //     ht->array[i]->length);
     // }
 
     f = open_file(words_filename);
-    while (~fscanf(f, "%s", temp)) {
+    while (read(f, temp)) {
         ++word_number;
         // if (word_number % 10000 == 0)
-        //     printf("%d %fs %d ok\n", word_number,
-        //            (double)(clock() - start) / CLOCKS_PER_SEC,
+        //     printf("%d %fs %d ok\n", word_number, clock_duration(),
         //            word_exist_number);
 
         if (ht_exist(ht, temp)) {
@@ -105,5 +106,5 @@ int main() {
 
     printf("%dKB, %lld times %d, %d\n", mp_get_length() / 1024, compare_number,
            word_number, word_exist_number);
-    printf("%f s\n", (double)(clock() - start) / CLOCKS_PER_SEC);
+    printf("%f s\n", clock_duration());
 }
