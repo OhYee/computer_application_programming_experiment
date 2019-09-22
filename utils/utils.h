@@ -1,4 +1,5 @@
 #include "./boolean/boolean.h"
+#include "./clock/clock.h"
 #include "./compare/compare.h"
 #include "./file/file.h"
 #include "./free/free.h"
