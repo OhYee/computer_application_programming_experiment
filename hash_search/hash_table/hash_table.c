@@ -104,7 +104,7 @@ int main() {
     }
     fclose(f);
 
-    printf("%dKB, %lld times %d, %d\n", mp_get_length() / 1024, compare_number,
+    printf("%.2fKB, %lld times %d, %d\n", (double)mp_get_length() / 1024, compare_number,
            word_number, word_exist_number);
     printf("%f s\n", clock_duration());
 }
