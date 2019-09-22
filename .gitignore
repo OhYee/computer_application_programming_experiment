@@ -5,3 +5,4 @@
 */testcase/*
 !*/testcase/patterns*.txt
 !*/testcase/words*.txt
+.vscode/*

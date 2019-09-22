@@ -16,14 +16,20 @@ boolean read(FILE *f, char *s) {
     while (1) {
         c = fgetc(f);
         if (c == EOF) {
-            return F;
+            if (ptr == s) {
+                return F;
+            } else {
+                *(ptr) = '\0';
+                return T;
+            }
         }
         if (c == '\n') {
             if (ptr == s) {
                 continue;
+            } else {
+                *(ptr) = '\0';
+                return T;
             }
-            *(ptr) = '\0';
-            return T;
         }
         *(ptr++) = c;
     }
