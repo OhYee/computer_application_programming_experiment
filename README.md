@@ -1,5 +1,7 @@
 # 计算机应用编程实验
 
+![](https://github.com/OhYee/computer_application_programming_experiment/workflows/master/badge.svg) ![](https://img.shields.io/github/stars/OhYee/computer_application_programming_experiment?color=orange) ![](https://img.shields.io/github/languages/code-size/OhYee/computer_application_programming_experiment)
+
 ## 运行说明
 
 已经按照模块分为不同文件，如果要编译运行使用`make`或`make run`。  
