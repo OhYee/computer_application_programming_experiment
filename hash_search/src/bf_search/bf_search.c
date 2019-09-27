@@ -30,10 +30,10 @@ typedef struct _bloom_filter {
 
 const int                max_pattern_number = 1280000;
 const int                max_string_length = 256;
-const int                hash_number = 8;
-const unsigned long long bit_length = 1 << 20;
+const int                hash_number = 5;
+const unsigned long long bit_length = 1 << 26;
 
-const unsigned int memory_length =
+const size_t memory_length =
     sizeof(bit_group) + sizeof(bloom_filter) + 8 * bit_length + 65536;
 
 extern long long compare_number;
@@ -91,39 +91,22 @@ bloom_filter *bf_init(unsigned int k, unsigned long long m) {
     return bf;
 }
 
+const int prime[] = {9999901, 9999907, 9999929, 9999931, 9999937,
+                     9999943, 9999971, 9999973, 9999991};
+
 unsigned long long hash(int type, char *s, unsigned long long limit) {
     unsigned long long code = 0;
     char *             ptr = s;
     int                param = 1;
-    switch (type) {
-        case 0:
-            while (!compare_char(*ptr, '\0')) {
-                code = (code + *ptr) % limit;
-                ++ptr;
-            }
-            break;
-        case 1:
-            while (!compare_char(*ptr, '\0')) {
-                code = (code ^ *ptr) % limit;
-                ++ptr;
-            }
-            break;
-        case 4:
-            while (!compare_char(*ptr, '\0')) {
-                code = (code + (param * (*ptr)) % limit) % limit;
-                param = (param * 99991) % limit;
-                ++ptr;
-            }
-            break;
-        default:
-            while (!compare_char(*ptr, '\0')) {
-                code = (code + (param * (*ptr)) % limit) % limit;
-                param = (param * type) % limit;
-                ++ptr;
-            }
-            break;
+    int                p = prime[8 - type];
+
+    while (!compare_char(*ptr, '\0')) {
+        code = (code + (param * (*ptr)));
+        param = (param * p);
+        ++ptr;
     }
-    code = (code * 999983) % limit;
+
+    code = (code ^ 9999901) % limit;
 
     return code;
 }
@@ -191,9 +174,8 @@ int main() {
     }
     fclose(f);
 
-    fprintf(output, "%.2fKB, %lld times %d, %d\n",
-            (double)mp_get_length() / 1024, compare_number, word_number,
-            word_exist_number);
+    fprintf(output, "%10.2f %10lld %7d %7d\n", (double)mp_get_length() / 1024,
+            compare_number, word_number, word_exist_number);
     printf("%f s\n", clock_duration());
     fclose(output);
     return 0;

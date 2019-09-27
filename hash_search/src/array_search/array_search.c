@@ -51,9 +51,8 @@ int main() {
     }
     fclose(f);
 
-    fprintf(output, "%.2fKB, %lld times %d, %d\n",
-            (double)mp_get_length() / 1024, compare_number, word_number,
-            word_exist_number);
+    fprintf(output, "%10.2f %10lld %7d %7d\n", (double)mp_get_length() / 1024,
+            compare_number, word_number, word_exist_number);
     printf("%f s\n", clock_duration());
     fclose(output);
     return 0;

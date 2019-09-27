@@ -31,10 +31,10 @@ int hash(char *s, int limit) {
     while (!compare_char(*ptr, '\0')) {
         // code = code ^ (*ptr);
         code += (param * (*ptr)) % limit;
-        param = (param << 2) % limit;
+        param = (param * 9999991) % limit;
         ++ptr;
     }
-    code = (code * 999983) % limit;
+    code = (code ^ 9999901) % limit;
     return code;
 }
 
@@ -70,7 +70,6 @@ boolean ht_exist(hash_table *ht, char *s) {
 }
 
 int main(int argc, char **argv) {
-    printf("%s\n", argv[0]);
     clock_start();
 
     mp_init(memory_length, mp_exit);
@@ -108,9 +107,8 @@ int main(int argc, char **argv) {
     }
     fclose(f);
 
-    fprintf(output, "%.2fKB, %lld times %d, %d\n",
-            (double)mp_get_length() / 1024, compare_number, word_number,
-            word_exist_number);
+    fprintf(output, "%10.2f %10lld %7d %7d\n", (double)mp_get_length() / 1024,
+            compare_number, word_number, word_exist_number);
     printf("%f s\n", clock_duration());
     fclose(output);
     return 0;
