@@ -1,11 +1,10 @@
+#include "free.h"
 #include "../boolean/boolean.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 typedef struct memory_pool {
-    void *head;
-    int   length;
-    int   max_length;
+    void * head;
+    size_t length;
+    size_t max_length;
     void (*error_callback)();
 } memory_pool;
 
@@ -13,7 +12,7 @@ memory_pool mp;
 
 void mp_exit() { exit(1); }
 
-void mp_init(int max_pool_length, void (*error_callback)()) {
+void mp_init(size_t max_pool_length, void (*error_callback)()) {
     mp.max_length = max_pool_length;
     mp.head = malloc(mp.max_length);
     mp.length = 0;
@@ -21,18 +20,18 @@ void mp_init(int max_pool_length, void (*error_callback)()) {
 }
 
 void mp_info() {
-    printf("memery_pool info:\n\tmax_length: %d\n\tnow_length: %d\n\taddress "
+    printf("memery_pool info:\n\tmax_length: %zu\n\tnow_length: %zu\n\taddress "
            "%p ~ %p ~ %p\n",
            mp.max_length, mp.length, mp.head, mp.head + mp.length,
            mp.head + mp.max_length);
 }
-int mp_get_length() { return mp.length; }
-int mp_get_max_length() { return mp.max_length; }
+size_t mp_get_length() { return mp.length; }
+size_t mp_get_max_length() { return mp.max_length; }
 
-void *mp_new(int length) {
+void *mp_new(size_t length) {
     if (mp.length + length > mp.max_length) {
-        printf("Can not make more memory. The memory pool is only %d bytes, "
-               "and %d used, can not make more %d bytes\n",
+        printf("Can not make more memory. The memory pool is only %zu bytes, "
+               "and %zu used, can not make more %zu bytes\n",
                mp.max_length, mp.length, length);
         mp.error_callback();
         return NULL;

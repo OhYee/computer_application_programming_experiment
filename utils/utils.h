@@ -5,3 +5,5 @@
 #include "./free/free.h"
 #include "./link/link.h"
 #include "./print/print.h"
+
+#define __USE_MINGW_ANSI_STDIO 1
