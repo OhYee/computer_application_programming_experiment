@@ -15,10 +15,14 @@ ifeq ($(ROOT),)
 	ROOT = ./
 endif
 
+ifeq ($(OUTPUT_DIR),)
+	ROOT = ./
+endif
+
 RM = rm -f
 PS = c
 CC = gcc
-CFLAGS = -g -Wall --std=c99
+CFLAGS = -g -Wall --std=c99 -O3
 
 MAIN_FILE_PATH = $(ROOT)$(MAIN_FILE)
 PROGRAM = $(MAIN_FILE_PATH).out
@@ -52,9 +56,9 @@ all:
 	-@$(MAKE) -s run && $(MAKE) -s clean
 build: $(PROGRAM)
 run: build
-	@./$(PROGRAM)
+	@cd $(OUTPUT_DIR) && $(PROGRAM)
 $(PROGRAM):$(SOURCE:.$(PS)=.o)
-	@$(CC) $(CFLAGS) -o "$(PROGRAM)" $(OBJS)
+	@$(CC) $(CFLAGS) -o "$(OUTPUT_DIR)$(PROGRAM)" $(OBJS)
 %.o:%.c
 	@$(CC) $(CFLAGS) -c -o "$@" "$<"
 %.d:%.c
