@@ -1,4 +1,4 @@
-#include "../../utils/utils.h"
+#include "../../../utils/utils.h"
 #include <memory.h>
 #include <stdlib.h>
 #include <time.h>
@@ -6,12 +6,13 @@
 // #define debug
 
 #ifdef debug
-const char *patterns_filename = "../testcase/patterns.txt";
-const char *words_filename = "../testcase/words.txt";
+const char *patterns_filename = "../test/patterns.txt";
+const char *words_filename = "../test/words.txt";
 #else
-const char *patterns_filename = "../testcase/patterns-127w_2.txt";
-const char *words_filename = "../testcase/words-98w.txt";
+const char *patterns_filename = "../test/patterns-127w.txt";
+const char *words_filename = "../test/words-98w.txt";
 #endif
+const char *output_filename = "./bf_search_output.txt";
 
 typedef unsigned int group_type;
 const int            group_type_size = sizeof(group_type) * 8;
@@ -108,7 +109,11 @@ unsigned long long hash(int type, char *s, unsigned long long limit) {
             }
             break;
         case 4:
-            code = strlen(s);
+            while (!compare_char(*ptr, '\0')) {
+                code = (code + (param * (*ptr)) % limit) % limit;
+                param = (param * 99991) % limit;
+                ++ptr;
+            }
             break;
         default:
             while (!compare_char(*ptr, '\0')) {
@@ -154,7 +159,8 @@ int main() {
 
     bloom_filter *bf = bf_init(hash_number, bit_length);
 
-    FILE *f = open_file(patterns_filename);
+    FILE *output = open_file(output_filename, "w");
+    FILE *f = open_file(patterns_filename, "r");
 
     while (read(f, temp)) {
         bf_add(bf, temp);
@@ -169,7 +175,7 @@ int main() {
     // bg_print(bf->value);
     // printf("\n");
 
-    f = open_file(words_filename);
+    f = open_file(words_filename, "r");
     while (read(f, temp)) {
         ++word_number;
         // if (word_number % 10000 == 0)
@@ -178,14 +184,17 @@ int main() {
 
         if (bf_exist(bf, temp)) {
             ++word_exist_number;
-            printf("%s yes\n", temp);
+            fprintf(output, "%s yes\n", temp);
         } else {
-            printf("%s no\n", temp);
+            fprintf(output, "%s no\n", temp);
         }
     }
     fclose(f);
 
-    printf("%.2fKB, %lld times %d, %d\n", (double)mp_get_length() / 1024,
-           compare_number, word_number, word_exist_number);
+    fprintf(output, "%.2fKB, %lld times %d, %d\n",
+            (double)mp_get_length() / 1024, compare_number, word_number,
+            word_exist_number);
     printf("%f s\n", clock_duration());
+    fclose(output);
+    return 0;
 }

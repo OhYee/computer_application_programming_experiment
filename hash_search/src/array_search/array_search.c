@@ -1,9 +1,10 @@
-#include "../../utils/utils.h"
+#include "../../../utils/utils.h"
 #include <memory.h>
 #include <time.h>
 
-const char *patterns_filename = "../testcase/patterns-127w_2.txt";
-const char *words_filename = "../testcase/words-98w.txt";
+const char *patterns_filename = "../test/patterns-127w.txt";
+const char *words_filename = "../test/words-98w.txt";
+const char *output_filename = "./array_search_output.txt";
 const int   max_pattern_number = 1280000;
 const int   max_string_length = 256;
 const int   memory_length = max_pattern_number * (sizeof(linked_node *) + 256) +
@@ -25,7 +26,8 @@ int main() {
     int   word_number = 0;
     int   word_exist_number = 0;
 
-    FILE *f = open_file(patterns_filename);
+    FILE *output = open_file(output_filename, "w");
+    FILE *f = open_file(patterns_filename, "r");
     while (read(f, temp)) {
         char *s = mp_new(sizeof(char *) * (strlen(temp) + 1));
         strcpy(s, temp);
@@ -33,7 +35,7 @@ int main() {
     }
     fclose(f);
 
-    f = open_file(words_filename);
+    f = open_file(words_filename, "r");
     while (read(f, temp)) {
         ++word_number;
         // if (word_number % 10000 == 0)
@@ -42,14 +44,17 @@ int main() {
 
         if (NULL != lk_search(lk, temp, compare)) {
             ++word_exist_number;
-            printf("%s yes\n", temp);
+            fprintf(output, "%s yes\n", temp);
         } else {
-            printf("%s no\n", temp);
+            fprintf(output, "%s no\n", temp);
         }
     }
     fclose(f);
 
-    printf("%.2fKB, %lld times %d, %d\n", (double)mp_get_length() / 1024,
-           compare_number, word_number, word_exist_number);
+    fprintf(output, "%.2fKB, %lld times %d, %d\n",
+            (double)mp_get_length() / 1024, compare_number, word_number,
+            word_exist_number);
     printf("%f s\n", clock_duration());
+    fclose(output);
+    return 0;
 }
