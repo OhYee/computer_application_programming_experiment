@@ -1,8 +1,9 @@
 *.d
 *.o
 *.out
+*.exe
 *.txt
-*/testcase/*
-!*/testcase/patterns*.txt
-!*/testcase/words*.txt
+*/test/*
+!*/test/patterns*.txt
+!*/test/words*.txt
 .vscode/*

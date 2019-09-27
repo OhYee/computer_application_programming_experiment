@@ -15,13 +15,23 @@ ifeq ($(ROOT),)
 	ROOT = ./
 endif
 
+ifeq ($(OUTPUT_DIR),)
+	ROOT = ./
+endif
+
 RM = rm -f
 PS = c
+
 CC = gcc
-CFLAGS = -g -Wall --std=c99
+CFLAGS = -g -Wall --std=c99 -O3
 
 MAIN_FILE_PATH = $(ROOT)$(MAIN_FILE)
 PROGRAM = $(MAIN_FILE_PATH).out
+
+ifeq ($(SYSTEM),WINDOWS)
+	CC = x86_64-w64-mingw32-gcc
+	PROGRAM = $(MAIN_FILE_PATH).exe
+endif
 
 PWD = `pwd`
 SUBDIRS = $(foreach d,$(EXTRA_DIRS),$(shell ls $(d) -F | grep "\/" | sed "s:^:$(d):" | grep -v "test")) 
@@ -52,9 +62,9 @@ all:
 	-@$(MAKE) -s run && $(MAKE) -s clean
 build: $(PROGRAM)
 run: build
-	@./$(PROGRAM)
+	@cd $(OUTPUT_DIR) && $(PROGRAM)
 $(PROGRAM):$(SOURCE:.$(PS)=.o)
-	@$(CC) $(CFLAGS) -o "$(PROGRAM)" $(OBJS)
+	@$(CC) $(CFLAGS) -o "$(OUTPUT_DIR)$(PROGRAM)" $(OBJS)
 %.o:%.c
 	@$(CC) $(CFLAGS) -c -o "$@" "$<"
 %.d:%.c
@@ -66,7 +76,7 @@ endif
 clean:
 	-@$(RM) $(DEPS)
 	-@$(RM) $(OBJS)
-	-@$(RM) $(PROGRAM)
+	-@$(RM) $(OUTPUT_DIR)$(PROGRAM)
 
 info:
 	@echo "CC:                       $(CC)"

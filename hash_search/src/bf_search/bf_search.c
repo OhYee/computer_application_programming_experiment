@@ -1,4 +1,4 @@
-#include "../../utils/utils.h"
+#include "../../../utils/utils.h"
 #include <memory.h>
 #include <stdlib.h>
 #include <time.h>
@@ -6,12 +6,13 @@
 // #define debug
 
 #ifdef debug
-const char *patterns_filename = "../testcase/patterns.txt";
-const char *words_filename = "../testcase/words.txt";
+const char *patterns_filename = "../test/patterns.txt";
+const char *words_filename = "../test/words.txt";
 #else
-const char *patterns_filename = "../testcase/patterns-127w_2.txt";
-const char *words_filename = "../testcase/words-98w.txt";
+const char *patterns_filename = "../test/patterns-127w.txt";
+const char *words_filename = "../test/words-98w.txt";
 #endif
+const char *output_filename = "./bf_search_output.txt";
 
 typedef unsigned int group_type;
 const int            group_type_size = sizeof(group_type) * 8;
@@ -29,10 +30,10 @@ typedef struct _bloom_filter {
 
 const int                max_pattern_number = 1280000;
 const int                max_string_length = 256;
-const int                hash_number = 8;
-const unsigned long long bit_length = 1 << 20;
+const int                hash_number = 5;
+const unsigned long long bit_length = 1 << 26;
 
-const unsigned int memory_length =
+const size_t memory_length =
     sizeof(bit_group) + sizeof(bloom_filter) + 8 * bit_length + 65536;
 
 extern long long compare_number;
@@ -90,35 +91,22 @@ bloom_filter *bf_init(unsigned int k, unsigned long long m) {
     return bf;
 }
 
+const int prime[] = {9999901, 9999907, 9999929, 9999931, 9999937,
+                     9999943, 9999971, 9999973, 9999991};
+
 unsigned long long hash(int type, char *s, unsigned long long limit) {
     unsigned long long code = 0;
     char *             ptr = s;
     int                param = 1;
-    switch (type) {
-        case 0:
-            while (!compare_char(*ptr, '\0')) {
-                code = (code + *ptr) % limit;
-                ++ptr;
-            }
-            break;
-        case 1:
-            while (!compare_char(*ptr, '\0')) {
-                code = (code ^ *ptr) % limit;
-                ++ptr;
-            }
-            break;
-        case 4:
-            code = strlen(s);
-            break;
-        default:
-            while (!compare_char(*ptr, '\0')) {
-                code = (code + (param * (*ptr)) % limit) % limit;
-                param = (param * type) % limit;
-                ++ptr;
-            }
-            break;
+    int                p = prime[8 - type];
+
+    while (!compare_char(*ptr, '\0')) {
+        code = (code + (param * (*ptr)));
+        param = (param * p);
+        ++ptr;
     }
-    code = (code * 999983) % limit;
+
+    code = (code ^ 9999901) % limit;
 
     return code;
 }
@@ -154,7 +142,8 @@ int main() {
 
     bloom_filter *bf = bf_init(hash_number, bit_length);
 
-    FILE *f = open_file(patterns_filename);
+    FILE *output = open_file(output_filename, "w");
+    FILE *f = open_file(patterns_filename, "r");
 
     while (read(f, temp)) {
         bf_add(bf, temp);
@@ -169,7 +158,7 @@ int main() {
     // bg_print(bf->value);
     // printf("\n");
 
-    f = open_file(words_filename);
+    f = open_file(words_filename, "r");
     while (read(f, temp)) {
         ++word_number;
         // if (word_number % 10000 == 0)
@@ -178,14 +167,16 @@ int main() {
 
         if (bf_exist(bf, temp)) {
             ++word_exist_number;
-            printf("%s yes\n", temp);
+            fprintf(output, "%s yes\n", temp);
         } else {
-            printf("%s no\n", temp);
+            fprintf(output, "%s no\n", temp);
         }
     }
     fclose(f);
 
-    printf("%.2fKB, %lld times %d, %d\n", (double)mp_get_length() / 1024,
-           compare_number, word_number, word_exist_number);
+    fprintf(output, "%10.2f %10lld %7d %7d\n", (double)mp_get_length() / 1024,
+            compare_number, word_number, word_exist_number);
     printf("%f s\n", clock_duration());
+    fclose(output);
+    return 0;
 }
