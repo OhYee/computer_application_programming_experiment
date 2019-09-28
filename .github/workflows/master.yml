@@ -12,5 +12,4 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: test hash_search/array
-      run: make build
+    - run: make build
