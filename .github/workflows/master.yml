@@ -13,8 +13,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: test hash_search/array
-      run: make -C hash_search/array build
-    - name: test hash_search/hash_table
-      run: make -C hash_search/hash_table build
-    - name: test hash_search/bloom_filter
-      run: make -C hash_search/bloom_filter build
+      run: make build
