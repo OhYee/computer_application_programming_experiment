@@ -1,4 +1,4 @@
-#include "../../../utils/utils.h"
+#include "../../utils/utils.h"
 #include <memory.h>
 #include <stdlib.h>
 #include <time.h>
@@ -12,7 +12,7 @@ const char *words_filename = "../test/words.txt";
 const char *patterns_filename = "../test/patterns-127w.txt";
 const char *words_filename = "../test/words-98w.txt";
 #endif
-const char *output_filename = "./bf_search_output.txt";
+const char *output_filename = "./result.txt";
 
 typedef unsigned int group_type;
 const int            group_type_size = sizeof(group_type) * 8;

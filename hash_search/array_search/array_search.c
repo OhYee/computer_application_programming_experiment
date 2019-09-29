@@ -1,10 +1,10 @@
-#include "../../../utils/utils.h"
+#include "../../utils/utils.h"
 #include <memory.h>
 #include <time.h>
 
 const char *patterns_filename = "../test/patterns-127w.txt";
 const char *words_filename = "../test/words-98w.txt";
-const char *output_filename = "./array_search_output.txt";
+const char *output_filename = "./result.txt";
 const int   max_pattern_number = 1280000;
 const int   max_string_length = 256;
 const int   memory_length = max_pattern_number * (sizeof(linked_node *) + 256) +

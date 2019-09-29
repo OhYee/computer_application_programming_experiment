@@ -1,10 +1,10 @@
-#include "../../../utils/utils.h"
+#include "../../utils/utils.h"
 #include <memory.h>
 #include <time.h>
 
 const char *       patterns_filename = "../test/patterns-127w.txt";
 const char *       words_filename = "../test/words-98w.txt";
-const char *       output_filename = "./hashtable_search_output.txt";
+const char *       output_filename = "./result.txt";
 const int          hash_table_size = 1 << 16;
 const int          max_pattern_number = 1280000;
 const int          max_string_length = 256;
