@@ -1,3 +1,3 @@
-#include "../boolean/boolean.h"
-boolean compare_char(char a, char b);
-boolean compare_string(char *a, char *b);
+// #include "../boolean/boolean.h"
+int compare_char(char a, char b);
+int compare_string(char *a, char *b);

@@ -4,32 +4,32 @@
 #include <stdio.h>
 
 typedef struct testcase_char {
-    char    arg1;
-    char    arg2;
-    boolean want_res;
+    char arg1;
+    char arg2;
+    int  want_res;
 
 } testcase_char;
 
 typedef struct testcase_string {
-    char *  arg1;
-    char *  arg2;
-    boolean want_res;
+    char *arg1;
+    char *arg2;
+    int   want_res;
 
 } testcase_string;
 
 int main() {
     boolean       pass = T;
     testcase_char test_char[] = {
-        {arg1: 'a', arg2: 'b', want_res: F},
-        {arg1: 'a', arg2: 'a', want_res: T},
-        {arg1: '0', arg2: '0', want_res: T},
-        {arg1: '1', arg2: '!', want_res: F},
+        {arg1: 'a', arg2: 'b', want_res: -1},
+        {arg1: 'a', arg2: 'a', want_res: 0},
+        {arg1: '0', arg2: '0', want_res: 0},
+        {arg1: '1', arg2: '!', want_res: 1},
     };
     testcase_string test_string[] = {
-        {arg1: "Hello", arg2: "Hello", want_res: T},
-        {arg1: "Hi", arg2: "Hi0", want_res: F},
-        {arg1: "Hi", arg2: "Hi\0", want_res: T},
-        {arg1: "ABC\0B", arg2: "ABC\0A", want_res: T},
+        {arg1: "Hello", arg2: "Hello", want_res: 0},
+        {arg1: "Hi", arg2: "Hi0", want_res: -1},
+        {arg1: "Hi", arg2: "Hi\0", want_res: 0},
+        {arg1: "ABC\0B", arg2: "ABC\0A", want_res: 0},
     };
 
     for (int i = 0; i < sizeof(test_char) / sizeof(testcase_char); ++i) {

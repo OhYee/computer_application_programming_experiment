@@ -1,15 +1,33 @@
 #include "../boolean/boolean.h"
 
 long long compare_number = 0;
-boolean   compare_char(char a, char b) {
+
+int compare_char(char a, char b) {
     ++compare_number;
-    return a == b;
+    if (a == b) {
+        return 0;
+    } else if (a > b) {
+        return 1;
+    } else {
+        return -1;
+    }
 }
-boolean compare_string(char *a, char *b) {
+
+int compare_string(char *a, char *b) {
     char *ptr_a = a, *ptr_b = b;
-    while (compare_char(*ptr_a, *ptr_b) && *ptr_a != '\0' && *ptr_b != '\0') {
+    while (*ptr_a != '\0' && *ptr_b != '\0') {
+        int res = compare_char(*ptr_a, *ptr_b) != 0;
+        if (res != 0) {
+            return res;
+        }
         ++ptr_a;
         ++ptr_b;
     }
-    return *ptr_a == '\0' && *ptr_b == '\0';
+    if (*ptr_a != '\0') {
+        return 1;
+    } else if (*ptr_b != '\0') {
+        return -1;
+    } else {
+        return 0;
+    }
 }
