@@ -5,10 +5,13 @@
 const char *patterns_filename = "../test/patterns-127w.txt";
 const char *words_filename = "../test/words-98w.txt";
 const char *output_filename = "./result.txt";
-static const int   max_pattern_number = 1280000;
-static const int    max_string_length = 256;
-static const int   memory_length = max_pattern_number * (sizeof(linked_node *) + 256) +
-                          (max_string_length * sizeof(char)) + 10000;
+
+#define max_pattern_number (1280000)
+#define max_string_length (256)
+#define memory_length                                                          \
+    (max_pattern_number * (sizeof(linked_node *) + 256) +                      \
+     (max_string_length * sizeof(char)) + 10000)
+     
 extern long long compare_number;
 
 boolean compare(void *a, void *b) {

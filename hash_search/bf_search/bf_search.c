@@ -28,12 +28,13 @@ typedef struct _bloom_filter {
     unsigned long long bit_length;
 } bloom_filter;
 
-static const int                max_pattern_number = 1280000;
-static const int                max_string_length = 256;
-static const int                hash_number = 5;
+#define max_pattern_number (1280000)
+#define max_string_length (256)
+#define hash_number (5)
+#define memory_length                                                          \
+    (sizeof(bit_group) + sizeof(bloom_filter) + 8 * bit_length + 65536)
+
 static const unsigned long long bit_length = 1 << 26;
-static const size_t             memory_length =
-    sizeof(bit_group) + sizeof(bloom_filter) + 8 * bit_length + 65536;
 
 extern long long compare_number;
 
