@@ -2,13 +2,13 @@
 #include <memory.h>
 #include <time.h>
 
-const char *       patterns_filename = "../test/patterns-127w.txt";
-const char *       words_filename = "../test/words-98w.txt";
-const char *       output_filename = "./result.txt";
-const int          hash_table_size = 1 << 16;
-const int          max_pattern_number = 1280000;
-const int          max_string_length = 256;
-const unsigned int memory_length =
+const char *        patterns_filename = "../test/patterns-127w.txt";
+const char *        words_filename = "../test/words-98w.txt";
+const char *        output_filename = "./result.txt";
+static const int    hash_table_size = 1 << 16;
+static const int    max_pattern_number = 1280000;
+static const int    max_string_length = 256;
+static const size_t memory_length =
     max_pattern_number *
         (sizeof(link *) + sizeof(linked_node) + max_string_length) +
     10000;

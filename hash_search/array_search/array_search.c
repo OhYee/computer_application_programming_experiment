@@ -5,9 +5,9 @@
 const char *patterns_filename = "../test/patterns-127w.txt";
 const char *words_filename = "../test/words-98w.txt";
 const char *output_filename = "./result.txt";
-const int   max_pattern_number = 1280000;
-const int   max_string_length = 256;
-const int   memory_length = max_pattern_number * (sizeof(linked_node *) + 256) +
+static const int   max_pattern_number = 1280000;
+static const int    max_string_length = 256;
+static const int   memory_length = max_pattern_number * (sizeof(linked_node *) + 256) +
                           (max_string_length * sizeof(char)) + 10000;
 extern long long compare_number;
 
