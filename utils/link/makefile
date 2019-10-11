@@ -1,4 +1,4 @@
 MAIN_FILE = test_link
 EXTRA_DIRS = ./ ../boolean/ ../print/ ../compare/ ../free/
-ROOT = ./test/
+OUTPUT_DIR = ./test/
 include ../make_utils.mk

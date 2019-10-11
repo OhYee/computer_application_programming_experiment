@@ -6,17 +6,13 @@
 # Make a file in source folder, and input:
 # 
 # PROGRAM := <Output file name>
-# ROOT := <Root of the file>
 # EXTRA_DIRS := <Other source folder>
+# OUTPUT_DIR = <Output folder>
 # include <Path to this file>
 #
 
-ifeq ($(ROOT),)
-	ROOT = ./
-endif
-
 ifeq ($(OUTPUT_DIR),)
-	ROOT = ./
+	OUTPUT_DIR = ./
 endif
 
 RM = rm -f
@@ -25,12 +21,13 @@ PS = c
 CC = gcc
 CFLAGS = -g -Wall --std=c99 -O3
 
-MAIN_FILE_PATH = $(ROOT)$(MAIN_FILE)
-PROGRAM = $(MAIN_FILE_PATH).out
+MAIN_FILE_PATH = $(OUTPUT_DIR)$(MAIN_FILE)
+PROGRAM = $(MAIN_FILE).out
+PROGRAM_PATH = $(OUTPUT_DIR)$(PROGRAM)
 
 ifeq ($(SYSTEM),WINDOWS)
 	CC = x86_64-w64-mingw32-gcc
-	PROGRAM = $(MAIN_FILE_PATH).exe
+	PROGRAM = $(MAIN_FILE).exe
 endif
 
 PWD = `pwd`
@@ -46,48 +43,35 @@ DEPS:=$(patsubst %.o,%.d,$(OBJS))
 MISSING_DEPS:=$(filter-out $(wildcard $(DEPS)),$(DEPS))
 MISSING_DEPS_SOURCE:=$(wildcard $(patsubst %.d,%.$(PS),$(MISS_DEPS)))
 
-
-ifeq ($(MAIN_FILE),)
-
-.PHONY:all clean info test
-all: 
-	-@$(MAKE) -s test && $(MAKE) -s clean
-test:
-	-@$(MAKE) -C ./test -s run;
-
-else
-
 .PHONY:all clean info build run
 all:
 	-@$(MAKE) -s run && $(MAKE) -s clean
-build: $(PROGRAM)
+build: $(PROGRAM_PATH)
 run: build
-	@cd $(OUTPUT_DIR) && $(PROGRAM)
-$(PROGRAM):$(SOURCE:.$(PS)=.o)
-	@$(CC) $(CFLAGS) -o "$(OUTPUT_DIR)$(PROGRAM)" $(OBJS)
+	@cd $(OUTPUT_DIR) && ./$(PROGRAM)
+$(PROGRAM_PATH):$(SOURCE:.$(PS)=.o)
+	@$(CC) $(CFLAGS) -o "$(PROGRAM_PATH)" $(OBJS)
 %.o:%.c
 	@$(CC) $(CFLAGS) -c -o "$@" "$<"
 %.d:%.c
 	@$(CC) $< -MM -MP -MT "$*.o" -MF "$*.d"
 -include $(DEPS)
 
-endif
-
 clean:
 	-@$(RM) $(DEPS)
 	-@$(RM) $(OBJS)
-	-@$(RM) $(OUTPUT_DIR)$(PROGRAM)
+	-@$(RM) $(PROGRAM_PATH)
 
 info:
 	@echo "CC:                       $(CC)"
 	@echo "CFLAGS:                   $(CFLAGS)"
 	@echo "RM:                       $(RM)"
 	@echo ""
-	@echo "root:                     $(ROOT)"
 	@echo "pwd:                      $(PWD)"
 	@echo "EXTRA_DIRS:               $(EXTRA_DIRS)"
 	@echo "SUBDIRS:                  $(SUBDIRS)"
 	@echo "DIRS:                     $(DIRS)"
+	@echo "OUTPUT_DIR:               $(OUTPUT_DIR)"
 	@echo ""
 	@echo "MAIN_FILE:                $(MAIN_FILE)"
 	@echo "PROGRAM:                  $(PROGRAM)"
