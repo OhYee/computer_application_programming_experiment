@@ -38,10 +38,6 @@ const size_t memory_length =
 
 extern long long compare_number;
 
-boolean compare(void *a, void *b) {
-    return compare_string((char *)(a), (char *)(b));
-}
-
 void bg_set(bit_group *bg, unsigned long long pos) {
     group_type *v = bg->bits;
     v[pos >> 3] |= 1 << (pos & 7);
@@ -100,7 +96,7 @@ unsigned long long hash(int type, char *s, unsigned long long limit) {
     int                param = 1;
     int                p = prime[8 - type];
 
-    while (!compare_char(*ptr, '\0')) {
+    while (compare_char(*ptr, '\0')!=0) {
         code = (code + (param * (*ptr)));
         param = (param * p);
         ++ptr;

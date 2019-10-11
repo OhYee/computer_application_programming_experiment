@@ -5,7 +5,9 @@
 #include "stdio.h"
 #include <memory.h>
 
-boolean compare(void *a, void *b) { return compare_string((char *)(a), (char *)(b)); }
+boolean compare(void *a, void *b) {
+    return compare_string((char *)(a), (char *)(b)) == 0;
+}
 
 int main() {
     mp_init(1024 * 4, mp_exit);
@@ -29,7 +31,7 @@ int main() {
     lk_add(lk, s);
 
     s = mp_new(5 * sizeof(char));
-    memcpy(s, "666", 5);
+    memcpy(s, "666", 3);
     lk_add(lk, s);
 
     linked_node *res = lk_search(lk, "ABCD", compare);
@@ -43,7 +45,7 @@ int main() {
     if (res == NULL) {
         print_ok("Can not find value\n");
     } else {
-        print_err("It is impossiable to find %s at %p", res->value, res);
+        print_err("Unwanted found %s at %p\n", res->value, res);
     }
 
     linked_node *ptr = lk->head;

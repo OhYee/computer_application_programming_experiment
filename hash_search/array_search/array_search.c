@@ -12,7 +12,7 @@ const int   memory_length = max_pattern_number * (sizeof(linked_node *) + 256) +
 extern long long compare_number;
 
 boolean compare(void *a, void *b) {
-    return compare_string((char *)(a), (char *)(b));
+    return compare_string((char *)(a), (char *)(b)) == 0;
 }
 
 int main() {

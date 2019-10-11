@@ -15,7 +15,7 @@ const unsigned int memory_length =
 extern long long compare_number;
 
 boolean compare(void *a, void *b) {
-    return compare_string((char *)(a), (char *)(b));
+    return compare_string((char *)(a), (char *)(b)) == 0;
 }
 
 typedef struct ht {
@@ -28,7 +28,7 @@ int hash(char *s, int limit) {
     char *       ptr = s;
 
     int param = 1;
-    while (!compare_char(*ptr, '\0')) {
+    while (compare_char(*ptr, '\0') != 0) {
         // code = code ^ (*ptr);
         code += (param * (*ptr)) % limit;
         param = (param * 9999991) % limit;
