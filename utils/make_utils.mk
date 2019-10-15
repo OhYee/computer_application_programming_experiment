@@ -75,6 +75,7 @@ info:
 	@echo ""
 	@echo "MAIN_FILE:                $(MAIN_FILE)"
 	@echo "PROGRAM:                  $(PROGRAM)"
+	@echo "PROGRAM_PATH:             $(PROGRAM_PATH)"
 	@echo "SOURCE:                   $(SOURCE)"
 	@echo "OBJS:                     $(OBJS)"
 	@echo "DEPS:                     $(DEPS) "
