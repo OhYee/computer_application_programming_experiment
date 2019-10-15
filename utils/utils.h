@@ -1,3 +1,4 @@
+#include "./blanced_binary_tree/blanced_binary_tree.c"
 #include "./boolean/boolean.h"
 #include "./clock/clock.h"
 #include "./compare/compare.h"
