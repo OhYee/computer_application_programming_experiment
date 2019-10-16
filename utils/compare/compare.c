@@ -16,7 +16,7 @@ int compare_char(char a, char b) {
 int compare_string(char *a, char *b) {
     char *ptr_a = a, *ptr_b = b;
     while (*ptr_a != '\0' && *ptr_b != '\0') {
-        int res = compare_char(*ptr_a, *ptr_b) != 0;
+        int res = compare_char(*ptr_a, *ptr_b);
         if (res != 0) {
             return res;
         }
