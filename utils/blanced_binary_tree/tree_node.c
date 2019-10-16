@@ -1,85 +1,85 @@
 #include "blanced_binary_tree.h"
 
-tree_node *tn_init(void *value) {
-    tree_node *tn = mp_new(sizeof(tree_node));
-    tn->value = value;
-    tn->parent = NULL;
-    tn->left = NULL;
-    tn->right = NULL;
-    tn->deep = 1;
-    return tn;
+avl_tree_node *avl_tn_init(void *value) {
+    avl_tree_node *avl_tn = mp_new(sizeof(avl_tree_node));
+    avl_tn->value = value;
+    avl_tn->parent = NULL;
+    avl_tn->left = NULL;
+    avl_tn->right = NULL;
+    avl_tn->deep = 1;
+    return avl_tn;
 }
 
-tree_node *tn_search(tree_node *tn, void *value, compare_function compare) {
-    if (tn == NULL) {
+avl_tree_node *avl_tn_search(avl_tree_node *avl_tn, void *value, compare_function compare) {
+    if (avl_tn == NULL) {
         return NULL;
     }
-    int res = compare(tn->value, value);
+    int res = compare(avl_tn->value, value);
     if (res == 0) {
-        return tn;
+        return avl_tn;
     } else if (res > 0) {
-        return tn_search(tn->left, value, compare);
+        return avl_tn_search(avl_tn->left, value, compare);
     } else {
-        return tn_search(tn->right, value, compare);
+        return avl_tn_search(avl_tn->right, value, compare);
     }
 }
 
-tree_node *tn_add(tree_node *tn, tree_node *value, compare_function compare) {
-    if (tn == NULL) {
+avl_tree_node *avl_tn_add(avl_tree_node *avl_tn, avl_tree_node *value, compare_function compare) {
+    if (avl_tn == NULL) {
         return value;
     }
-    int res = compare(tn->value, value->value);
+    int res = compare(avl_tn->value, value->value);
     if (res > 0) {
-        tn->left = tn_add(tn->left, value, compare);
-        tn->left->parent = tn;
+        avl_tn->left = avl_tn_add(avl_tn->left, value, compare);
+        avl_tn->left->parent = avl_tn;
     } else if (res < 0) {
-        tn->right = tn_add(tn->right, value, compare);
-        tn->right->parent = tn;
+        avl_tn->right = avl_tn_add(avl_tn->right, value, compare);
+        avl_tn->right->parent = avl_tn;
     }
 
-    int l = tn->left ? tn->left->deep : 0;
-    int r = tn->right ? tn->right->deep : 0;
+    int l = avl_tn->left ? avl_tn->left->deep : 0;
+    int r = avl_tn->right ? avl_tn->right->deep : 0;
     if (abs(l - r) <= 1) {
-        tn->deep = (l > r ? l : r) + 1;
+        avl_tn->deep = (l > r ? l : r) + 1;
     } else {
         if (l - r > 1) {
-            return tn_right(tn);
+            return avl_tn_right(avl_tn);
         } else {
-            return tn_left(tn);
+            return avl_tn_left(avl_tn);
         }
     }
 
-    return tn;
+    return avl_tn;
 }
 
-char *tn_print(tree_node *tn) {
-    if (tn == NULL) {
+char *avl_tn_print(avl_tree_node *avl_tn) {
+    if (avl_tn == NULL) {
         return "NULL";
     } else {
-        char *t = (char *)(tn->value);
-        char *l = tn_print(tn->left);
-        char *r = tn_print(tn->right);
+        char *t = (char *)(avl_tn->value);
+        char *l = avl_tn_print(avl_tn->left);
+        char *r = avl_tn_print(avl_tn->right);
         printf("    %s(%s)(%d)\n    ↙    ↘\n%s    %s\n\n", t,
-               tn->parent ? (char *)(tn->parent->value) : "NULL", tn->deep, l, r);
+               avl_tn->parent ? (char *)(avl_tn->parent->value) : "NULL", avl_tn->deep, l, r);
         return t;
     }
 }
 
-void tn_update_deep(tree_node *tn) {
-    if (tn != NULL) {
-        int l = tn->left ? tn->left->deep : 0;
-        int r = tn->right ? tn->right->deep : 0;
-        tn->deep = (l > r ? l : r) + 1;
+void avl_tn_update_deep(avl_tree_node *avl_tn) {
+    if (avl_tn != NULL) {
+        int l = avl_tn->left ? avl_tn->left->deep : 0;
+        int r = avl_tn->right ? avl_tn->right->deep : 0;
+        avl_tn->deep = (l > r ? l : r) + 1;
     }
 }
 
-tree_node *tn_left(tree_node *tn) {
-    // printf("%s l\n", (char *)tn->value);
-    tree_node *a = tn;
-    tree_node *b = a->right;
-    tree_node *c = b->left;
+avl_tree_node *avl_tn_left(avl_tree_node *avl_tn) {
+    // printf("%s l\n", (char *)avl_tn->value);
+    avl_tree_node *a = avl_tn;
+    avl_tree_node *b = a->right;
+    avl_tree_node *c = b->left;
 
-    tree_node *root = b;
+    avl_tree_node *root = b;
     b->parent = a->parent;
 
     b->left = a;
@@ -89,20 +89,20 @@ tree_node *tn_left(tree_node *tn) {
     if (c)
         c->parent = a;
 
-    tn_update_deep(c);
-    tn_update_deep(a);
-    tn_update_deep(b);
+    avl_tn_update_deep(c);
+    avl_tn_update_deep(a);
+    avl_tn_update_deep(b);
 
     return root;
 }
 
-tree_node *tn_right(tree_node *tn) {
-    // printf("%s r\n", (char *)tn->value);
-    tree_node *a = tn;
-    tree_node *b = a->left;
-    tree_node *c = b->right;
+avl_tree_node *avl_tn_right(avl_tree_node *avl_tn) {
+    // printf("%s r\n", (char *)avl_tn->value);
+    avl_tree_node *a = avl_tn;
+    avl_tree_node *b = a->left;
+    avl_tree_node *c = b->right;
 
-    tree_node *root = b;
+    avl_tree_node *root = b;
     b->parent = a->parent;
 
     b->right = a;
@@ -112,9 +112,9 @@ tree_node *tn_right(tree_node *tn) {
     if (c)
         c->parent = a;
 
-    tn_update_deep(c);
-    tn_update_deep(a);
-    tn_update_deep(b);
+    avl_tn_update_deep(c);
+    avl_tn_update_deep(a);
+    avl_tn_update_deep(b);
 
     return root;
 }

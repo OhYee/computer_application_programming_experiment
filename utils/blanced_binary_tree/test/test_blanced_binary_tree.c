@@ -22,26 +22,26 @@ int *num_init(int a) {
 int main() {
     mp_init(1 << 16, mp_exit);
     avl_tree *at = at_init(compare);
-    at_add(at, tn_init((void *)num_init(3)));
-    at_add(at, tn_init((void *)num_init(2)));
-    at_add(at, tn_init((void *)num_init(5)));
-    at_add(at, tn_init((void *)num_init(7)));
-    at_add(at, tn_init((void *)num_init(1)));
-    at_add(at, tn_init((void *)num_init(4)));
-    at_add(at, tn_init((void *)num_init(9)));
-    at_add(at, tn_init((void *)num_init(6)));
-    at_add(at, tn_init((void *)num_init(11)));
-    at_add(at, tn_init((void *)num_init(12)));
-    at_add(at, tn_init((void *)num_init(8)));
-    at_add(at, tn_init((void *)num_init(10)));
-    at_add(at, tn_init((void *)num_init(13)));
-    at_add(at, tn_init((void *)num_init(20)));
-    at_add(at, tn_init((void *)num_init(14)));
-    at_add(at, tn_init((void *)num_init(15)));
-    at_add(at, tn_init((void *)num_init(16)));
-    at_add(at, tn_init((void *)num_init(17)));
-    at_add(at, tn_init((void *)num_init(18)));
-    at_add(at, tn_init((void *)num_init(19)));
+    at_add(at, 3, sizeof(int));
+    at_add(at, 2, sizeof(int));
+    at_add(at, 5, sizeof(int));
+    at_add(at, 7, sizeof(int));
+    at_add(at, 1, sizeof(int));
+    at_add(at, 4, sizeof(int));
+    at_add(at, 9, sizeof(int));
+    at_add(at, 6, sizeof(int));
+    at_add(at, 1, sizeof(int));
+    at_add(at, 1, sizeof(int));
+    at_add(at, 8, sizeof(int));
+    at_add(at, 1, sizeof(int));
+    at_add(at, 1, sizeof(int));
+    at_add(at, 2, sizeof(int));
+    at_add(at, 1, sizeof(int));
+    at_add(at, 1, sizeof(int));
+    at_add(at, 1, sizeof(int));
+    at_add(at, 1, sizeof(int));
+    at_add(at, 1, sizeof(int));
+    at_add(at, 1, sizeof(int));
 
     at_print(at);
 

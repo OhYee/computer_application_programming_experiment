@@ -9,13 +9,17 @@ avl_tree *at_init(compare_function compare) {
 
 boolean at_search(avl_tree *at, void *value) {
     // printf("search %s\n", (char *)value);
-    return tn_search(at->root, value, at->compare) != NULL;
+    return avl_tn_search(at->root, value, at->compare) != NULL;
 }
 
-void at_add(avl_tree *at, tree_node *value) {
+void at_add(avl_tree *at, void *value, int size) {
     // printf("Add %s\n", (char *)value->value);
-    at->root = tn_add(at->root, value, at->compare);
+    void *data = mp_new(size);
+    memcpy(data, value, size);
+    avl_tree_node *td = avl_tn_init(data);
+
+    at->root = avl_tn_add(at->root, td, at->compare);
     // at_print(at);
 }
 
-void at_print(avl_tree *at) { tn_print(at->root); }
+void at_print(avl_tree *at) { avl_tn_print(at->root); }
