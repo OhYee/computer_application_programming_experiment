@@ -36,19 +36,31 @@ tree_node *tn_add(tree_node *tn, tree_node *value, compare_function compare) {
         tn->right = tn_add(tn->right, value, compare);
         tn->right->parent = tn;
     }
-    tn_update_deep(tn);
+
+    int l = tn->left ? tn->left->deep : 0;
+    int r = tn->right ? tn->right->deep : 0;
+    if (abs(l - r) <= 1) {
+        tn->deep = (l > r ? l : r) + 1;
+    } else {
+        if (l - r > 1) {
+            return tn_right(tn);
+        } else {
+            return tn_left(tn);
+        }
+    }
+
     return tn;
 }
 
-int tn_print(tree_node *tn) {
+char *tn_print(tree_node *tn) {
     if (tn == NULL) {
-        return -1;
+        return "NULL";
     } else {
-        int t = *(int *)(tn->value);
-        int l = tn_print(tn->left);
-        int r = tn_print(tn->right);
-        printf("    %4d(%d)(%d)\n    ↙    ↘\n%4d    %4d\n\n", t,
-               tn->parent ? *(int *)(tn->parent->value) : -1, tn->deep, l, r);
+        char *t = (char *)(tn->value);
+        char *l = tn_print(tn->left);
+        char *r = tn_print(tn->right);
+        printf("    %s(%s)(%d)\n    ↙    ↘\n%s    %s\n\n", t,
+               tn->parent ? (char *)(tn->parent->value) : "NULL", tn->deep, l, r);
         return t;
     }
 }
@@ -59,4 +71,50 @@ void tn_update_deep(tree_node *tn) {
         int r = tn->right ? tn->right->deep : 0;
         tn->deep = (l > r ? l : r) + 1;
     }
+}
+
+tree_node *tn_left(tree_node *tn) {
+    // printf("%s l\n", (char *)tn->value);
+    tree_node *a = tn;
+    tree_node *b = a->right;
+    tree_node *c = b->left;
+
+    tree_node *root = b;
+    b->parent = a->parent;
+
+    b->left = a;
+    a->parent = b;
+
+    a->right = c;
+    if (c)
+        c->parent = a;
+
+    tn_update_deep(c);
+    tn_update_deep(a);
+    tn_update_deep(b);
+
+    return root;
+}
+
+tree_node *tn_right(tree_node *tn) {
+    // printf("%s r\n", (char *)tn->value);
+    tree_node *a = tn;
+    tree_node *b = a->left;
+    tree_node *c = b->right;
+
+    tree_node *root = b;
+    b->parent = a->parent;
+
+    b->right = a;
+    a->parent = b;
+
+    a->left = c;
+    if (c)
+        c->parent = a;
+
+    tn_update_deep(c);
+    tn_update_deep(a);
+    tn_update_deep(b);
+
+    return root;
 }
