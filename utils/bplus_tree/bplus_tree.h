@@ -24,6 +24,7 @@ struct _bplus_tree_node {
 bplus_tree *bpt_init(int m, compare_function compare);
 void        bpt_add(bplus_tree *bpt, void *value, int size);
 void        bpt_print(bplus_tree *bpt);
+boolean     bpt_exist(bplus_tree *bpt, void *value);
 
 bplus_tree_node *bptn_init(int max_length);
 bplus_tree_node *bptn_next(bplus_tree_node *bptn);
@@ -39,6 +40,9 @@ int bptn_add_to_node(bplus_tree_node *bptn, void *value,
 bplus_tree_node *bptn_split(bplus_tree_node *bptn, int max_length);
 int              bptn_search_index(bplus_tree_node *bptn, void *value,
                                    compare_function compare);
+void *           bptn_get_extremum(bplus_tree_node *bptn);
 bplus_tree_node *bptn_add(bplus_tree_node *bptn, void *value, int max_length,
                           compare_function compare);
 void             bptn_print(bplus_tree_node *bptn);
+boolean         bptn_exist(bplus_tree_node *bptn, void *value,
+                            compare_function compare);
