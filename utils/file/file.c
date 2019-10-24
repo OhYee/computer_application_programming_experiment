@@ -9,7 +9,8 @@ FILE *open_file(const char *filename, const char *type) {
     return f;
 }
 
-boolean read(FILE *f, char *s) {
+int read(FILE *f, char *s) {
+    int   length = 0;
     char *ptr = s;
     char  c;
 
@@ -17,10 +18,10 @@ boolean read(FILE *f, char *s) {
         c = fgetc(f);
         if (c == EOF) {
             if (ptr == s) {
-                return F;
+                return 0;
             } else {
                 *(ptr) = '\0';
-                return T;
+                return length;
             }
         }
         if (c == '\n') {
@@ -28,9 +29,10 @@ boolean read(FILE *f, char *s) {
                 continue;
             } else {
                 *(ptr) = '\0';
-                return T;
+                return length;
             }
         }
         *(ptr++) = c;
+        ++length;
     }
 }
