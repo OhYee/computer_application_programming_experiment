@@ -1,6 +1,6 @@
 #include "bits.h"
 
-bits *new_bits() {
+bits *bits_init() {
     bits *b = mp_new(sizeof(bits));
     b->value = NULL;
     b->start = 0;
@@ -8,7 +8,7 @@ bits *new_bits() {
     return b;
 }
 bits *bits_init_with_minimum_bytes(void *value, int start, int end) {
-    bits *b = new_bits();
+    bits *b = bits_init();
     int   start_byte = start / 8;
     int   end_byte = end / 8 + (end % 8 ? 1 : 0);
     b->value = mp_new(end_byte - start_byte);
@@ -17,6 +17,18 @@ bits *bits_init_with_minimum_bytes(void *value, int start, int end) {
     memcpy(b->value, value + start_byte, end_byte - start_byte);
     return b;
 }
+
+bits *bits_init_with_minimum_bits(bits *bb) {
+    bits *b = bits_init();
+    int   start_byte = bb->start / 8;
+    int   end_byte = bb->end / 8 + (bb->end % 8 ? 1 : 0);
+    b->value = mp_new(end_byte - start_byte);
+    b->start = bb->start - start_byte * 8;
+    b->end = bb->end - start_byte * 8;
+    memcpy(b->value, bb->value + start_byte, end_byte - start_byte);
+    return b;
+}
+
 bits *bits_sub(bits *b, int start, int end) {
     bits *bb = mp_new(sizeof(bits));
     bb->value = b->value;
@@ -50,4 +62,9 @@ int bits_prefix(bits *b1, bits *b2, int group_length) {
         }
     }
     return prefix;
+}
+void bits_print(bits *b) {
+    for (int i = b->start; i < b->end; ++i) {
+        printf("%d", bits_get(b, i));
+    }
 }
