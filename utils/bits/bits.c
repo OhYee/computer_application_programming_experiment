@@ -21,7 +21,7 @@ bits *bits_sub(bits *b, int start, int end) {
     bits *bb = mp_new(sizeof(bits));
     bb->value = b->value;
     bb->start = b->start + start;
-    bb->end = b->start + end;
+    bb->end = b->start + end - start;
     return bb;
 }
 int bits_get(bits *b, int pos) {
