@@ -32,12 +32,12 @@ int bits_len(bits *b) { return b->end - b->start; }
 int bits_prefix(bits *b1, bits *b2, int group_length) {
     int l1 = bits_len(b1);
     int l2 = bits_len(b2);
-    int lm = l1 < l2 ? l1 : l2;
+    int lmin = l1 < l2 ? l1 : l2;
     int prefix = 0;
-    for (int i = 0; i < lm; i += group_length) {
+    for (int i = 0; i < lmin; i += group_length) {
         int group_match = 0;
-        for (int j = i; j - i < group_length && j < lm; ++j) {
-            if (bits_get(b1, i) == bits_get(b2, i)) {
+        for (int j = i; j - i < group_length && j < lmin; ++j) {
+            if (bits_get(b1, j) == bits_get(b2, j)) {
                 ++group_match;
             } else {
                 break;
