@@ -16,13 +16,13 @@ const char *output_filename = "./result.txt";
 
 extern long long compare_number;
 
-const int    max_pattern_number = 1280000;
-const int    max_string_length = 256;
-const int    m = 10;
-const size_t memory_length =
-    sizeof(bplus_tree) +
-    max_pattern_number * (sizeof(bplus_tree_node) + m * 2 * sizeof(void *)) +
-    max_pattern_number * max_string_length + 65536;
+#define max_pattern_number (1280000)
+#define max_string_length (256)
+#define m (10)
+#define memory_length                                                          \
+    (sizeof(bplus_tree) +                                                      \
+     max_pattern_number * (sizeof(bplus_tree_node) + m * 2 * sizeof(void *)) + \
+     max_pattern_number * max_string_length + 65536)
 
 int compare(void *a, void *b) { return compare_string(a, b); }
 

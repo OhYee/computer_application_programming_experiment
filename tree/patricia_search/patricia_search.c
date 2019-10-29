@@ -16,29 +16,15 @@ const char *output_filename = "./result.txt";
 
 extern long long compare_number;
 
-const int    max_pattern_number = 1280000;
-const int    max_string_length = 256;
-const size_t memory_length =
-    sizeof(radix_tree) +
-    max_pattern_number *
-        (max_string_length * sizeof(radix_tree_node) + max_string_length) +
-    65535;
+#define max_pattern_number (1280000)
+#define max_string_length (256)
+#define memory_length                                                          \
+    (sizeof(radix_tree) +                                                      \
+     max_pattern_number *                                                      \
+         (max_string_length * sizeof(radix_tree_node) + max_string_length) +   \
+     65535)
 
 int compare(void *a, void *b) { return compare_string(a, b); }
-
-int  t = 0;
-void rtn_test(radix_tree_node *rtn, int m) {
-    if (rtn == NULL) {
-        return;
-    }
-    if (bits_len(rtn->value) == 0) {
-        ++t;
-    }
-    for (int i = 0; i < m; ++i) {
-        rtn_test(rtn->children[i], m);
-    }
-}
-void rt_test(radix_tree *rt) { rtn_test(rt->root, pow2(rt->k)); }
 
 int main() {
     clock_start();
@@ -59,8 +45,6 @@ int main() {
     }
     fclose(f);
 
-    // rt_test(rt);
-    // printf("%d\n", t);
     // rt_print(rt);
 
     f = open_file(words_filename, "r");
