@@ -26,7 +26,10 @@ int read(FILE *f, char *s) {
         }
         if (c == '\n') {
             if (ptr == s) {
-                continue;
+                // continue;
+                *(ptr++) = '\n';
+                *(ptr++) = '\0';
+                return 1;
             } else {
                 *(ptr) = '\0';
                 return length;
