@@ -2,6 +2,7 @@
 
 long long compare_number = 0;
 
+int compare_init() { compare_number = 0; }
 int compare_char(char a, char b) {
     ++compare_number;
     if (a == b) {
