@@ -14,6 +14,7 @@ struct _radix_tree {
 
 radix_tree *rt_init(int k);
 void        rt_add(radix_tree *rt, void *value, int size);
+boolean     rt_exist(radix_tree *rt, void *value, int size);
 void        rt_print(radix_tree *rt);
 
 struct _radix_tree_node {
@@ -25,5 +26,6 @@ struct _radix_tree_node {
 radix_tree_node *rtn_init(int m);
 radix_tree_node *rtn_add(radix_tree_node *rtn, bits *value, int k,
                          boolean memory);
+boolean          rtn_exist(radix_tree_node *rtn, bits *value, int k);
 void             rtn_print(radix_tree_node *rtn, int m);
 int              pow2(int m);

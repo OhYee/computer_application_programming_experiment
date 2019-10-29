@@ -1,17 +1,29 @@
 #include "radix_tree.h"
 
 int pow2(int m) {
-    int n = 1;
-    while (m--) {
-        n <<= 1;
+    switch (m) {
+        case 0:
+            return 1;
+        case 1:
+            return 2;
+        case 2:
+            return 4;
+        case 3:
+            return 8;
+        default:
+            break;
     }
-    return n;
+    int t = pow2(m / 2);
+    return t * t * (t % 2 ? 2 : 1);
 }
 
 int rtn_get_child_key(bits *value, int prefix, int k) {
     int l = bits_len(value);
-    if (prefix >= l) {
-        return -1;
+    if (prefix > l) {
+        print_err("Uncepted error: prefix %d and value is ", prefix);
+        bits_print(value);
+        print_err("\n");
+        exit(1);
     }
     int key = 0;
     for (int i = 0; i < k && i + prefix < l; ++i) {
@@ -29,64 +41,72 @@ radix_tree_node *rtn_init(int k) {
 radix_tree_node *rtn_add(radix_tree_node *rtn, bits *value, int k,
                          boolean memory) {
     int m = pow2(k);
-    int l_node = bits_len(rtn->value);
-    int l_value = bits_len(value);
+    if (rtn == NULL) {
+        // if add to null, then make node
+        rtn = rtn_init(m);
+        rtn->end_of_value = T;
+        if (memory) {
+            rtn->value =
+                bits_init_with_minimum_bits(value, value->start, value->end);
+        } else {
+            rtn->value = value;
+        }
+        return rtn;
+    }
+
+    int              l_node = bits_len(rtn->value);
+    int              l_value = bits_len(value);
+    radix_tree_node *root = rtn;
 
     // get the prefix
     int prefix = bits_prefix(rtn->value, value, k);
-    printf("prefix %d\n", prefix);
-    if (prefix == -1) {
-        // no prefix, value is same as this node.
+    if (prefix == l_node && prefix == l_value) {
+        // value is same as this node.
 
         // this node is same as the value
         rtn->end_of_value = T;
-        return NULL;
+        return rtn;
     }
+
     if (prefix < l_node) {
         // node need split
         int key = rtn_get_child_key(rtn->value, prefix, k);
-        printf("node child key %d\n", key);
 
-        bits *new_bits = bits_sub(rtn->value, prefix, bits_len(rtn->value));
-        if (rtn->children[key] == NULL) {
-            // child is null
-            rtn->children[key] = rtn_init(m);
-            rtn->children[key]->value = new_bits;
-            rtn->children[key]->end_of_value = rtn->end_of_value;
-        } else {
-            // child is not empty
-            rtn_add(rtn->children[key], new_bits, k, F);
-        }
-        // update this node
-        rtn->value->end = prefix;
-        rtn->end_of_value = F;
+        root = rtn_init(m);
+        root->value = bits_sub(rtn->value, 0, prefix);
+        root->end_of_value = F;
+        root->children[key] = rtn;
+        rtn->value->start +=  prefix;
     }
+
     if (prefix < l_value) {
         // new value need split
         int key = rtn_get_child_key(value, prefix, k);
-        printf("value child key %d\n", key);
-        bits *new_bits;
-        if (memory) {
-            // the value need make memory
-            new_bits = bits_init_with_minimum_bits(value);
-        } else {
-            new_bits = bits_sub(value, prefix, bits_len(value));
-        }
-        if (rtn->children[key] == NULL) {
-            // child is null
-            rtn->children[key] = rtn_init(k);
-            rtn->children[key]->value = new_bits;
-            rtn->children[key]->end_of_value = T;
-        } else {
-            // child is not empty
-            rtn_add(rtn->children[key], new_bits, k, F);
-        }
-    }
-    if (l_value < l_node && prefix == l_value) {
-        rtn->end_of_value = T;
+        value->start += prefix;
+        root->children[key] = rtn_add(root->children[key], value, k, memory);
     }
 
-    return NULL;
+    return root;
+}
+
+boolean rtn_exist(radix_tree_node *rtn, bits *value, int k) {
+    if (rtn == NULL) {
+        return F;
+    }
+
+    int prefix = bits_prefix(rtn->value, value, k);
+    if (prefix != bits_len(rtn->value)) {
+        return F;
+    }
+
+    if (prefix == bits_len(value) && rtn->end_of_value == T) {
+        return T;
+    }
+
+    int key = rtn_get_child_key(value, prefix, k);
+    value->start += prefix;
+
+    return rtn_exist(rtn->children[key], value, k);
 }
 
 void rtn_print(radix_tree_node *rtn, int m) {

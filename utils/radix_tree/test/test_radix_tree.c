@@ -17,8 +17,19 @@ int main() {
     rt_add(rt, "My", 2); // 01001101 01111001
     rt_print(rt);
 
+    if (rt_exist(rt, "Va", 2) == T) {
+        print_err("want F got T\n");
+        pass = F;
+    }
+    printf("==\n");
+
+    if (rt_exist(rt, "God", 3) == F) {
+        print_err("want T got F\n");
+        pass = F;
+    }
+
     /*
-    
+
     1111001000010110
     1011001010011110
     111000101111011000100110
