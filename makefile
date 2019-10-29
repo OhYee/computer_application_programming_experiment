@@ -1,4 +1,4 @@
-FOLDERS = hash_search
+FOLDERS = hash_search tree
 
 build clean:
 	@for folder in $(FOLDERS) ; do \
