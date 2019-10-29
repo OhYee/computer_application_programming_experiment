@@ -18,18 +18,22 @@ bits *bits_init_with_minimum_bytes(void *value, int start, int end) {
     return b;
 }
 
-bits *bits_init_with_minimum_bits(bits *bb) {
-    bits *b = bits_init();
-    int   start_byte = bb->start / 8;
-    int   end_byte = bb->end / 8 + (bb->end % 8 ? 1 : 0);
-    b->value = mp_new(end_byte - start_byte);
-    b->start = bb->start - start_byte * 8;
-    b->end = bb->end - start_byte * 8;
-    memcpy(b->value, bb->value + start_byte, end_byte - start_byte);
-    return b;
+bits *bits_init_with_minimum_bits(bits *b, int start, int end) {
+    bits *bb = bits_init();
+    int   start_byte = start / 8;
+    int   end_byte = end / 8 + (end % 8 ? 1 : 0);
+    bb->value = mp_new(end_byte - start_byte);
+    bb->start = start - start_byte * 8;
+    bb->end = end - start_byte * 8;
+    memcpy(bb->value, b->value + start_byte, end_byte - start_byte);
+    return bb;
 }
 
 bits *bits_sub(bits *b, int start, int end) {
+    if (end + b->start >= b->end || start + b->start >= b->end) {
+        print_err("bits overflow in bits_sub()\n");
+        exit(1);
+    }
     bits *bb = mp_new(sizeof(bits));
     bb->value = b->value;
     bb->start = b->start + start;
@@ -38,6 +42,10 @@ bits *bits_sub(bits *b, int start, int end) {
 }
 int bits_get(bits *b, int pos) {
     pos += b->start;
+    if (pos >= b->end || pos < 0) {
+        print_err("bits overflow in bits_get()\n");
+        exit(1);
+    }
     return (b->value[pos >> 3] >> (pos & 7)) & 1;
 }
 int bits_len(bits *b) { return b->end - b->start; }
@@ -64,7 +72,8 @@ int bits_prefix(bits *b1, bits *b2, int group_length) {
     return prefix;
 }
 void bits_print(bits *b) {
-    for (int i = b->start; i < b->end; ++i) {
+    printf("[%p %d %d]", b->value, b->start, b->end);
+    for (int i = 0; i < bits_len(b); ++i) {
         printf("%d", bits_get(b, i));
     }
 }
