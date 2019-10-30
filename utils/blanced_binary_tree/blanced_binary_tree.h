@@ -8,7 +8,7 @@ typedef int (*compare_function)(void *, void *);
 typedef struct _avl_tree_node avl_tree_node;
 struct _avl_tree_node {
     void *     value;
-    avl_tree_node *parent;
+    // avl_tree_node *parent;
     avl_tree_node *left;
     avl_tree_node *right;
     int        deep;
