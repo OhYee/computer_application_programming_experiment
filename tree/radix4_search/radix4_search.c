@@ -47,6 +47,8 @@ int main() {
 
     // rt_print(rt);
 
+    compare_init();
+
     f = open_file(words_filename, "r");
     while (read(f, temp)) {
         ++word_number;

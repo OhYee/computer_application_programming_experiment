@@ -48,6 +48,8 @@ int main() {
     bpt_print(bpt);
 #endif
 
+    compare_init();
+
     f = open_file(words_filename, "r");
     while (read(f, temp)) {
         ++word_number;
