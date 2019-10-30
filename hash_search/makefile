@@ -7,5 +7,5 @@ build clean:
 
 run:
 	@for folder in $(FOLDERS) ; do \
-		make -C ./$$folder/ -s run && tail -n 1 ./$$folder/result.txt;\
+		echo $$folder && make -C ./$$folder/ -s run && tail -n 1 ./$$folder/result.txt && echo '';\
 	done
