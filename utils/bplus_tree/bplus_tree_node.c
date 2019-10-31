@@ -3,7 +3,11 @@
 // index is the min value or the max value
 #define MIN_VALUE
 
+int _bplus_node_number = 0;
+extern long long compare_number;
+
 bplus_tree_node *bptn_init(int max_length) {
+    ++_bplus_node_number;
     bplus_tree_node *bptn = mp_new(sizeof(bplus_tree_node));
     bptn->keys = mp_new(sizeof(void *) * (max_length + 1));
     bptn->pointers = mp_new(sizeof(void *) * (max_length + 1));
@@ -167,6 +171,7 @@ void bptn_print(bplus_tree_node *bptn) {
 
 boolean bptn_exist(bplus_tree_node *bptn, void *value,
                    compare_function compare) {
+    ++compare_number;
     int index = bptn_search_index(bptn, value, compare);
     if (compare(bptn->keys[index], value) == 0) {
         return T;

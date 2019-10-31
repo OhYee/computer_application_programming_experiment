@@ -1,5 +1,8 @@
 #include "radix_tree.h"
 
+int _radix_node_number = 0;
+extern long long compare_number;
+
 int pow2(int m) {
     switch (m) {
         case 0:
@@ -33,6 +36,7 @@ int rtn_get_child_key(bits *value, int prefix, int k) {
 }
 
 radix_tree_node *rtn_init(int k) {
+    ++_radix_node_number;
     radix_tree_node *rtn = mp_new(sizeof(radix_tree_node));
     rtn->children = mp_new(sizeof(radix_tree_node *) * pow2(k));
     return rtn;
@@ -76,7 +80,7 @@ radix_tree_node *rtn_add(radix_tree_node *rtn, bits *value, int k,
         root->value = bits_sub(rtn->value, 0, prefix);
         root->end_of_value = F;
         root->children[key] = rtn;
-        rtn->value->start +=  prefix;
+        rtn->value->start += prefix;
     }
 
     if (prefix < l_value) {
@@ -93,6 +97,7 @@ boolean rtn_exist(radix_tree_node *rtn, bits *value, int k) {
     if (rtn == NULL) {
         return F;
     }
+    ++compare_number;
 
     int prefix = bits_prefix(rtn->value, value, k);
     if (prefix != bits_len(rtn->value)) {

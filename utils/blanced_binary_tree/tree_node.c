@@ -1,6 +1,14 @@
 #include "blanced_binary_tree.h"
 
-avl_tree_node *avl_tn_init(void *value) {
+int              _avl_tree_node_number = 0;
+extern long long compare_number;
+
+avl_tree_node *avl_tn_init(void *value, int size) {
+    ++_avl_tree_node_number;
+
+    char *s = mp_new(size);
+    memcpy(s, value, size);
+
     avl_tree_node *avl_tn = mp_new(sizeof(avl_tree_node));
     avl_tn->value = value;
     // avl_tn->parent = NULL;
@@ -15,6 +23,8 @@ avl_tree_node *avl_tn_search(avl_tree_node *avl_tn, void *value,
     if (avl_tn == NULL) {
         return NULL;
     }
+    ++compare_number;
+
     int res = compare(avl_tn->value, value);
     if (res == 0) {
         return avl_tn;
