@@ -14,11 +14,11 @@ boolean at_search(avl_tree *at, void *value) {
 
 void at_add(avl_tree *at, void *value, int size) {
     // printf("Add %s\n", (char *)value->value);
-    void *data = mp_new(size);
-    memcpy(data, value, size);
-    avl_tree_node *td = avl_tn_init(data);
+    // void *data = mp_new(size);
+    // memcpy(data, value, size);
+    // avl_tree_node *td = avl_tn_init(data);
 
-    at->root = avl_tn_add(at->root, td, at->compare);
+    at->root = avl_tn_add(at->root, value, size, at->compare);
     // at_print(at);
 }
 

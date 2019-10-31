@@ -10,7 +10,7 @@ avl_tree_node *avl_tn_init(void *value, int size) {
     memcpy(s, value, size);
 
     avl_tree_node *avl_tn = mp_new(sizeof(avl_tree_node));
-    avl_tn->value = value;
+    avl_tn->value = s;
     // avl_tn->parent = NULL;
     avl_tn->left = NULL;
     avl_tn->right = NULL;
@@ -35,18 +35,21 @@ avl_tree_node *avl_tn_search(avl_tree_node *avl_tn, void *value,
     }
 }
 
-avl_tree_node *avl_tn_add(avl_tree_node *avl_tn, avl_tree_node *value,
+avl_tree_node *avl_tn_add(avl_tree_node *avl_tn, void *value, int size,
                           compare_function compare) {
     if (avl_tn == NULL) {
-        return value;
+        return avl_tn_init(value, size);
     }
-    int res = compare(avl_tn->value, value->value);
+    int res = compare(avl_tn->value, value);
     if (res > 0) {
-        avl_tn->left = avl_tn_add(avl_tn->left, value, compare);
+        avl_tn->left = avl_tn_add(avl_tn->left, value, size, compare);
         // avl_tn->left->parent = avl_tn;
     } else if (res < 0) {
-        avl_tn->right = avl_tn_add(avl_tn->right, value, compare);
+        avl_tn->right = avl_tn_add(avl_tn->right, value, size, compare);
         // avl_tn->right->parent = avl_tn;
+    } else {
+        // same value do nothing
+        return avl_tn;
     }
 
     int l = avl_tn->left ? avl_tn->left->deep : 0;
