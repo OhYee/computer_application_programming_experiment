@@ -17,13 +17,16 @@ const char *output_filename = "./result.txt";
 extern long long compare_number;
 extern int       _radix_node_number;
 
+#define k (1)
+#define m (2)
 #define max_pattern_number (1280000)
 #define max_string_length (256)
+#define max_string_byte (13359219)
 #define memory_length                                                          \
-    (sizeof(radix_tree) +                                                      \
-     max_pattern_number *                                                      \
-         (max_string_length * sizeof(radix_tree_node) + max_string_length) +   \
-     65535)
+    (max_string_byte + max_pattern_number * 2 *                                \
+                           (sizeof(radix_tree_node) +                          \
+                            sizeof(radix_tree_node *) * m + sizeof(bits))) +   \
+        65536
 
 int compare(void *a, void *b) { return compare_string(a, b); }
 
@@ -68,5 +71,20 @@ int main() {
             word_exist_number);
     printf("%f s\n", clock_duration());
     fclose(output);
+
+    // extern int _bits_string_num;
+    // extern int _bits_string_mem;
+    // extern int _bits_num;
+    // extern int _bits_mem;
+
+    // extern int _radix_node_number;
+    // extern int _radix_strmem;
+    // extern int _radix_nodemem;
+    // extern int _radix_strnum;
+
+    // printf("%d\n%d %d %d %d\n%d %d %d %d\n", memory_length, _bits_string_num,
+    //        _bits_string_mem, _bits_num, _bits_mem, _radix_node_number,
+    //        _radix_strmem, _radix_nodemem, _radix_strnum);
+
     return 0;
 }

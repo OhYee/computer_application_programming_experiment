@@ -19,11 +19,12 @@ extern int       _bplus_node_number;
 
 #define max_pattern_number (1280000)
 #define max_string_length (256)
+#define max_string_byte (13359219)
 #define m (10)
 #define memory_length                                                          \
     (sizeof(bplus_tree) +                                                      \
      max_pattern_number * (sizeof(bplus_tree_node) + m * 2 * sizeof(void *)) + \
-     max_pattern_number * max_string_length + 65536)
+     max_string_byte + 65536)
 
 int compare(void *a, void *b) { return compare_string(a, b); }
 
@@ -69,5 +70,10 @@ int main() {
             word_exist_number);
     printf("%f s\n", clock_duration());
     fclose(output);
+
+    // extern int _bplus_string_mem;
+    // extern int _bplus_node_mem;
+    // printf("%d %d %d\n", _bplus_string_mem, _bplus_node_mem,sizeof(bplus_tree));
+    
     return 0;
 }

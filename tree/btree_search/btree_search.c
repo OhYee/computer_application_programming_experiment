@@ -19,10 +19,10 @@ extern int       _avl_tree_node_number;
 
 #define max_pattern_number (1280000)
 #define max_string_length (256)
-#define m (10)
+#define max_string_byte (13359219)
 #define memory_length                                                          \
     (sizeof(avl_tree) + max_pattern_number * sizeof(avl_tree_node) +           \
-     max_pattern_number * max_string_length + 65536)
+     max_string_byte + 65536)
 
 int compare(void *a, void *b) { return compare_string(a, b); }
 
