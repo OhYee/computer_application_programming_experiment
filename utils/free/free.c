@@ -15,6 +15,10 @@ void mp_exit() { exit(1); }
 void mp_init(size_t max_pool_length, void (*error_callback)()) {
     mp.max_length = max_pool_length;
     mp.head = malloc(mp.max_length);
+    if (mp.head == NULL) {
+        printf("init error. need %zu bytes\n", max_pool_length);
+        error_callback();
+    }
     mp.length = 0;
     mp.error_callback = error_callback;
 }
