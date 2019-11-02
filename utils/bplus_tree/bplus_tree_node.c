@@ -3,7 +3,9 @@
 // index is the min value or the max value
 #define MIN_VALUE
 
-int _bplus_node_number = 0;
+int              _bplus_node_number = 0;
+int              _bplus_node_mem = 0;
+int              _bplus_string_mem = 0;
 extern long long compare_number;
 
 bplus_tree_node *bptn_init(int max_length) {
@@ -11,6 +13,10 @@ bplus_tree_node *bptn_init(int max_length) {
     bplus_tree_node *bptn = mp_new(sizeof(bplus_tree_node));
     bptn->keys = mp_new(sizeof(void *) * (max_length + 1));
     bptn->pointers = mp_new(sizeof(void *) * (max_length + 1));
+
+    _bplus_node_mem +=
+        (sizeof(bplus_tree_node) + sizeof(void *) * (max_length + 1) +
+         sizeof(void *) * (max_length + 1));
     memset(bptn->pointers, 0, sizeof(void *) * (max_length + 1));
     bptn->num = 0;
     bptn->is_leaf = T;
@@ -111,7 +117,12 @@ bplus_tree_node *bptn_add(bplus_tree_node *bptn, void *value, int max_length,
     if (bptn->is_leaf) {
         // left
         // insert whatever
-        bptn_add_to_node(bptn, value, compare);
+
+        int   l = strlen(value) + 1;
+        void *p = mp_new(l);
+        memcpy(p, value, l);
+        _bplus_string_mem += l;
+        bptn_add_to_node(bptn, p, compare);
 
         // splite (if need)
         bplus_tree_node *next = bptn_split(bptn, max_length);

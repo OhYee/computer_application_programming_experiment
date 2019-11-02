@@ -44,5 +44,5 @@ void *           bptn_get_extremum(bplus_tree_node *bptn);
 bplus_tree_node *bptn_add(bplus_tree_node *bptn, void *value, int max_length,
                           compare_function compare);
 void             bptn_print(bplus_tree_node *bptn);
-boolean         bptn_exist(bplus_tree_node *bptn, void *value,
+boolean          bptn_exist(bplus_tree_node *bptn, void *value,
                             compare_function compare);

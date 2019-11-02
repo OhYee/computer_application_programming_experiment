@@ -1,6 +1,9 @@
 #include "radix_tree.h"
 
-int _radix_node_number = 0;
+int              _radix_node_number = 0;
+int              _radix_strmem = 0;
+int              _radix_nodemem = 0;
+int              _radix_strnum = 0;
 extern long long compare_number;
 
 int pow2(int m) {
@@ -36,18 +39,20 @@ int rtn_get_child_key(bits *value, int prefix, int k) {
 }
 
 radix_tree_node *rtn_init(int k) {
+    int m = pow2(k);
     ++_radix_node_number;
+    _radix_nodemem += sizeof(radix_tree_node) + sizeof(radix_tree_node *) * m;
     radix_tree_node *rtn = mp_new(sizeof(radix_tree_node));
-    rtn->children = mp_new(sizeof(radix_tree_node *) * pow2(k));
+    rtn->children = mp_new(sizeof(radix_tree_node *) * m);
     return rtn;
 }
 
 radix_tree_node *rtn_add(radix_tree_node *rtn, bits *value, int k,
                          boolean memory) {
-    int m = pow2(k);
+    // int m = pow2(k);
     if (rtn == NULL) {
         // if add to null, then make node
-        rtn = rtn_init(m);
+        rtn = rtn_init(k);
         rtn->end_of_value = T;
         if (memory) {
             rtn->value =
@@ -76,7 +81,7 @@ radix_tree_node *rtn_add(radix_tree_node *rtn, bits *value, int k,
         // node need split
         int key = rtn_get_child_key(rtn->value, prefix, k);
 
-        root = rtn_init(m);
+        root = rtn_init(k);
         root->value = bits_sub(rtn->value, 0, prefix);
         root->end_of_value = F;
         root->children[key] = rtn;

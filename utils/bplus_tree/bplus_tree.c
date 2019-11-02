@@ -9,9 +9,12 @@ bplus_tree *bpt_init(int m, compare_function compare) {
 }
 
 void bpt_add(bplus_tree *bpt, void *value, int size) {
-    void *p = mp_new(size);
-    memcpy(p, value, size);
     if (bpt->root == NULL) {
+        extern int _bplus_string_mem;
+        void *     p = mp_new(size);
+        memcpy(p, value, size);
+        _bplus_string_mem += size;
+
         bplus_tree_node *root = bptn_init(bpt->m);
         root->keys[0] = p;
         root->pointers[0] = NULL;
@@ -22,7 +25,7 @@ void bpt_add(bplus_tree *bpt, void *value, int size) {
         bpt->root = root;
     } else {
         bplus_tree_node *split_node =
-            bptn_add(bpt->root, p, bpt->m, bpt->compare);
+            bptn_add(bpt->root, value, bpt->m, bpt->compare);
         if (split_node != NULL) {
             bplus_tree_node *root = bptn_init(bpt->m);
             root->keys[0] = bptn_get_extremum(bpt->root);

@@ -1,6 +1,14 @@
 #include "bits.h"
 
+int _bits_string_num = 0;
+int _bits_string_mem = 0;
+int _bits_num = 0;
+int _bits_mem = 0;
+
 bits *bits_init() {
+    ++_bits_num;
+    _bits_mem += sizeof(bits);
+
     bits *b = mp_new(sizeof(bits));
     b->value = NULL;
     b->start = 0;
@@ -15,6 +23,10 @@ bits *bits_init_with_minimum_bytes(void *value, int start, int end) {
     b->start = start - start_byte * 8;
     b->end = end - start_byte * 8;
     memcpy(b->value, value + start_byte, end_byte - start_byte);
+
+    _bits_string_mem += end_byte - start_byte;
+    ++_bits_string_num;
+
     return b;
 }
 
@@ -26,6 +38,10 @@ bits *bits_init_with_minimum_bits(bits *b, int start, int end) {
     bb->start = start - start_byte * 8;
     bb->end = end - start_byte * 8;
     memcpy(bb->value, b->value + start_byte, end_byte - start_byte);
+
+    _bits_string_mem += end_byte - start_byte;
+    ++_bits_string_num;
+
     return bb;
 }
 
@@ -34,7 +50,7 @@ bits *bits_sub(bits *b, int start, int end) {
         print_err("bits overflow in bits_sub()\n");
         exit(1);
     }
-    bits *bb = mp_new(sizeof(bits));
+    bits *bb = bits_init();
     bb->value = b->value;
     bb->start = b->start + start;
     bb->end = b->start + end;
