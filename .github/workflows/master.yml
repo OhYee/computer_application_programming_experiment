@@ -12,4 +12,4 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - run: make build
+    - run: make build -e TEST=1
