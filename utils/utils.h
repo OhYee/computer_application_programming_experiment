@@ -9,5 +9,6 @@
 #include "link/link.h"
 #include "print/print.h"
 #include "radix_tree/radix_tree.h"
+#include "sort/sort.h"
 
 #define __USE_MINGW_ANSI_STDIO 1
