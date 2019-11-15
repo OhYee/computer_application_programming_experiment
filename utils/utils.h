@@ -6,6 +6,7 @@
 #include "compare/compare.h"
 #include "file/file.h"
 #include "free/free.h"
+#include "kmp/kmp.h"
 #include "link/link.h"
 #include "print/print.h"
 #include "radix_tree/radix_tree.h"
