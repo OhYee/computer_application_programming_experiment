@@ -19,12 +19,13 @@ void sort(int l, int r, void *args, sort_compare_function compare,
             }
             if (left < right) {
                 swap(args, right--, left);
+                mid = left;
             }
         }
         // swap(left, mid);
 
         // 递归调用
-        sort(l, left - 1, args, compare, swap); // 排序mid左边
-        sort(left + 1, r, args, compare, swap); // 排序mid右边
+        sort(l, mid - 1, args, compare, swap); // 排序mid左边
+        sort(mid + 1, r, args, compare, swap); // 排序mid右边
     }
 }

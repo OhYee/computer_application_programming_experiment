@@ -19,10 +19,10 @@ void swap_int(void *args, int i, int j) {
 
 boolean test_int() {
     boolean pass = T;
-    int     nums[7] = {5, 1, 4, 2, 7, 3, 6};
+    int     nums[8] = {5, 1, 4, 2,8, 7, 3, 6};
 
-    sort(0, 6, nums, compare_int, swap_int);
-    for (int i = 0; i < 7; i++) {
+    sort(0, 7, nums, compare_int, swap_int);
+    for (int i = 0; i < 8; i++) {
         if (nums[i] != i + 1) {
             print_err("Error at a[%d]=%d want %d\n", i, nums[i], i + 1);
             pass = F;
@@ -37,14 +37,14 @@ int compare_pair(void *args, int i, int j) {
     return args_values[i] - args_values[j];
 }
 void swap_pair(void *args, int i, int j) {
-    char *args_keys = (char *)(args);
-    int * args_values = (int *)(args + 1);
+    char *args_keys = (char *)(((void **)args)[0]);
+    int * args_values = (int *)(((void **)args)[1]);
 
     char temp_key = args_keys[i];
     args_keys[i] = args_keys[j];
     args_keys[j] = temp_key;
 
-    char temp_value = args_values[i];
+    int temp_value = args_values[i];
     args_values[i] = args_values[j];
     args_values[j] = temp_value;
 }
