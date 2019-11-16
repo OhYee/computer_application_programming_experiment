@@ -41,6 +41,15 @@ int main() {
         print_err("Can not find value\n");
     }
 
+    lk_remove(lk, res);
+
+    res = lk_search(lk, "ABCD", compare);
+    if (res == NULL) {
+        print_ok("Can not find value\n");
+    } else {
+        print_err("Unwanted found %s at %p\n", res->value, res);
+    }
+
     res = lk_search(lk, "CC", compare);
     if (res == NULL) {
         print_ok("Can not find value\n");

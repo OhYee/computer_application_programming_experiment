@@ -2,6 +2,9 @@
 #include "../free/free.h"
 #include <stdio.h>
 
+// link node memory pool
+linked_node *_link_node_unused = NULL;
+
 link *lk_init() {
     link *lk = mp_new(sizeof(link));
     lk->head = lk->tail = NULL;
@@ -10,7 +13,13 @@ link *lk_init() {
 }
 
 linked_node *lk_node(void *ptr) {
-    linked_node *node = mp_new(sizeof(linked_node));
+    linked_node *node = NULL;
+    if (_link_node_unused == NULL) {
+        node = mp_new(sizeof(linked_node));
+    } else {
+        node = _link_node_unused;
+        _link_node_unused = _link_node_unused->next;
+    }
     node->next = NULL;
     node->value = ptr;
     return node;
@@ -28,6 +37,27 @@ void lk_add(link *lk, void *ptr) {
 }
 
 boolean lk_empty(link *lk) { return lk->head == NULL && lk->tail == NULL; }
+
+void lk_remove(link *lk, linked_node *ptr) {
+    linked_node *p = lk->head;
+
+    if (p == ptr) {
+        p = lk->head = ptr->next;
+    } else {
+        while (p != NULL && p->next != ptr) {
+            p = p->next;
+        }
+        if (p != NULL && p->next == ptr) {
+            p->next = ptr->next;
+            --lk->length;
+            ptr->next = _link_node_unused;
+            _link_node_unused = ptr->next;
+        }
+    }
+    if (lk->tail == ptr) {
+        lk->tail = p;
+    }
+}
 
 // search target in the link using compare function
 linked_node *lk_search(link *lk, void *target,
