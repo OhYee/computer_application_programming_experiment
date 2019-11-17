@@ -1,3 +1,4 @@
+#pragma once
 #include "../boolean/boolean.h"
 
 typedef struct _node {
