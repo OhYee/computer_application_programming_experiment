@@ -7,4 +7,6 @@
 !*/test/patterns*.txt
 !*/test/words*.txt
 !pattern_match/test/pattern.txt
+!pattern_match/test/pattern_simple.txt
+!pattern_match/test/string_simple.txt
 .vscode/*
