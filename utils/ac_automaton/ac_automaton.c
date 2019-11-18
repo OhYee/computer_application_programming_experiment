@@ -1,5 +1,7 @@
 #include "ac_automaton.h"
 
+int char2int(char c) { return c > 0 ? c : c + 256; }
+
 ac_automaton *ac_init() {
     ac_automaton *ac = mp_new(sizeof(ac_automaton));
     ac->root = ac_tree_node_init('\0');
@@ -42,7 +44,7 @@ void ac_build(ac_automaton *ac) {
 }
 
 void ac_match_char(ac_automaton *ac, char c) {
-    int idx = c;
+    int idx = char2int(c);
     while (ac->match->children[idx] == NULL && ac->match != ac->root) {
         ac->match = ac->match->failed;
     }
@@ -70,7 +72,7 @@ ac_tree_node *ac_tree_node_init(char value) {
 }
 
 ac_tree_node *ac_tree_node_add(ac_tree_node *actn, char *s) {
-    int idx = *s;
+    int idx = char2int(*s);
     if (compare_char('\0', *(s)) == 0) {
         return actn;
     }
@@ -86,8 +88,8 @@ ac_tree_node *ac_tree_node_add(ac_tree_node *actn, char *s) {
 
 void ac_tree_node_print(ac_tree_node *actn, ac_tree_node *parent) {
     if (actn != NULL) {
-        printf("%c(%p) failed->%p parent=%p\n", actn->value, actn, actn->failed,
-               parent);
+        printf("%1c %3d (%p) failed->%p parent=%p\n", actn->value, actn->value,
+               actn, actn->failed, parent);
         for (int i = 0; i < 256; ++i) {
             ac_tree_node_print(actn->children[i], actn);
         }
