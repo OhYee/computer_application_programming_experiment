@@ -18,6 +18,7 @@ void kmp_char(char c, char *pattern, int *pattern_pos, int *next, int *ans) {
         *pattern_pos = next[*pattern_pos];
     if (pattern[++(*pattern_pos)] == '\0') {
         ++(*ans);
-        *pattern_pos = next[*pattern_pos - 1] + 1;
+        *pattern_pos =
+            next[*pattern_pos - 1] + (next[*pattern_pos - 1] == 0 ? 0 : 1);
     }
 }

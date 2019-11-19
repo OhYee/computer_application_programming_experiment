@@ -41,11 +41,30 @@ boolean test_2() {
     return T;
 }
 
+boolean test_3() {
+    char *pattern = "AB";
+    char *string = "ABABBAB";
+    int   next[2];
+    kmp_get_next(pattern, next);
+
+    char *c = string;
+    int   pos = 0;
+    int   ans = 0;
+    while (*c != '\0') {
+        kmp_char(*(c++), pattern, &pos, next, &ans);
+    }
+    if (ans != 3) {
+        print_err("test_3 error, want %d, got %d\n", 3, ans);
+        return F;
+    }
+    return T;
+}
 int main() {
     boolean pass = T;
 
     pass &= test_1();
     pass &= test_2();
+    pass &= test_3();
 
     if (pass) {
         print_ok("All testcases passed\n");
