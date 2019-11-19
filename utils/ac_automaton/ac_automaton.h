@@ -14,7 +14,7 @@ struct _ac_automaton {
 };
 
 struct _ac_tree_node {
-    char           value;
+    // char           value;
     ac_tree_node **children;
     ac_tree_node * failed;
     // boolean       is_pattern_end;
@@ -29,4 +29,4 @@ void          ac_match_char(ac_automaton *ac, char c);
 
 ac_tree_node *ac_tree_node_init(char value);
 ac_tree_node *ac_tree_node_add(ac_tree_node *actn, char *s);
-void          ac_tree_node_print(ac_tree_node *actn, ac_tree_node *parent);
+void ac_tree_node_print(ac_tree_node *actn, ac_tree_node *parent, int value);

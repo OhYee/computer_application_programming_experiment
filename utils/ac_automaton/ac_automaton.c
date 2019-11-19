@@ -58,13 +58,13 @@ void ac_match_char(ac_automaton *ac, char c) {
     }
 }
 
-void ac_print(ac_automaton *ac) { ac_tree_node_print(ac->root, NULL); }
+void ac_print(ac_automaton *ac) { ac_tree_node_print(ac->root, NULL, 0); }
 
 ac_tree_node *ac_tree_node_init(char value) {
     ac_tree_node *actn = mp_new(sizeof(ac_tree_node));
     actn->children = mp_new(256 * sizeof(ac_tree_node *));
     // actn->is_pattern_end = F;
-    actn->value = value;
+    // actn->value = value;
     actn->failed = NULL;
     actn->match_number = 0;
     memset(actn->children, 0, 256 * sizeof(ac_tree_node *));
@@ -86,12 +86,12 @@ ac_tree_node *ac_tree_node_add(ac_tree_node *actn, char *s) {
     return ac_tree_node_add(actn->children[idx], s + 1);
 }
 
-void ac_tree_node_print(ac_tree_node *actn, ac_tree_node *parent) {
+void ac_tree_node_print(ac_tree_node *actn, ac_tree_node *parent, int value) {
     if (actn != NULL) {
-        printf("%1c %3d (%p) failed->%p parent=%p\n", actn->value, actn->value,
-               actn, actn->failed, parent);
+        printf("%1c %3d (%p) failed->%p parent=%p\n", value, value, actn,
+               actn->failed, parent);
         for (int i = 0; i < 256; ++i) {
-            ac_tree_node_print(actn->children[i], actn);
+            ac_tree_node_print(actn->children[i], actn, i);
         }
     }
 }

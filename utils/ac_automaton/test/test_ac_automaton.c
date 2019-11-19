@@ -1,14 +1,12 @@
 #include "../../print/print.h"
 #include "../ac_automaton.h"
 
-boolean judge(ac_tree_node *actn, char value, ac_tree_node *failed) {
-    if (actn->value == value && actn->failed == failed) {
+boolean judge(ac_tree_node *actn, ac_tree_node *failed) {
+    if (actn->failed == failed) {
         return T;
     } else {
-        print_err("Error at %c(%p) failed->(%c)%p, want %c(%p) "
-                  "failed->(%c)%p\n",
-                  value, actn, failed->value, failed, actn->value, actn,
-                  actn->failed->value, actn->failed);
+        print_err("Error at %p failed->%p, want failed->%p\n", actn, failed,
+                  actn->failed);
         return F;
     }
 }
@@ -30,27 +28,27 @@ int main() {
     ac_build(ac);
 
     // ac_print(ac);
-    pass &= judge(ac->root, '\0', ac->root);
+    pass &= judge(ac->root,  ac->root);
 
-    pass &= judge(ac->root->children['a'], 'a', ac->root);
-    pass &= judge(ac->root->children['a']->children['b'], 'b',
-                  ac->root->children['b']);
+    pass &= judge(ac->root->children['a'], ac->root);
+    pass &=
+        judge(ac->root->children['a']->children['b'], ac->root->children['b']);
 
-    pass &= judge(ac->root->children['b'], 'b', ac->root);
-    pass &= judge(ac->root->children['b']->children['a'], 'a',
-                  ac->root->children['a']);
-    pass &= judge(ac->root->children['b']->children['a']->children['b'], 'b',
+    pass &= judge(ac->root->children['b'], ac->root);
+    pass &=
+        judge(ac->root->children['b']->children['a'], ac->root->children['a']);
+    pass &= judge(ac->root->children['b']->children['a']->children['b'],
                   ac->root->children['a']->children['b']);
 
-    pass &= judge(ac->root->children['b']->children['c'], 'c',
-                  ac->root->children['c']);
-    pass &= judge(ac->root->children['b']->children['c']->children['a'], 'a',
+    pass &=
+        judge(ac->root->children['b']->children['c'], ac->root->children['c']);
+    pass &= judge(ac->root->children['b']->children['c']->children['a'],
                   ac->root->children['c']->children['a']);
 
-    pass &= judge(ac->root->children['c'], 'c', ac->root);
-    pass &= judge(ac->root->children['c']->children['a'], 'a',
-                  ac->root->children['a']);
-    pass &= judge(ac->root->children['c']->children['a']->children['a'], 'a',
+    pass &= judge(ac->root->children['c'], ac->root);
+    pass &=
+        judge(ac->root->children['c']->children['a'], ac->root->children['a']);
+    pass &= judge(ac->root->children['c']->children['a']->children['a'],
                   ac->root->children['a']);
 
     char *c = string;
