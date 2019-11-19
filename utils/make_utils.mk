@@ -29,7 +29,7 @@ ifeq ($(SYSTEM),WINDOWS)
 	CC = x86_64-w64-mingw32-gcc
 	PROGRAM = $(MAIN_FILE).exe
 else ifeq ($(TEST),)
-	CFLAGS += -m32
+	# CFLAGS += -m32
 endif
 
 PWD = `pwd`
