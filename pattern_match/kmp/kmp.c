@@ -3,21 +3,22 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define debug
+// #define debug
 
 #ifdef debug
 const char *patterns_filename = "../test/pattern_simple.txt";
 const char *string_filename = "../test/string_simple.txt";
 #else
-const char *patterns_filename = "../test/patterns-127w.txt";
-const char *words_filename = "../test/words-98w.txt";
+const char *patterns_filename = "../test/pattern_bf_kmp.txt";
+const char *string_filename = "../test/string.txt";
 #endif
 const char *output_filename = "./result.txt";
 
 extern long long compare_number;
 extern int       _avl_tree_node_number;
 
-#define max_pattern_number (2256700)
+#define string_file_byte (919943484)
+#define max_pattern_number (1600)
 #define max_string_length (256)
 #define memory_length (max_pattern_number * max_string_length)
 
@@ -49,18 +50,20 @@ void swap(void *args, int i, int j) {
 
 int main() {
     clock_start();
+    double cost_time = 0;
 
     mp_init(memory_length, mp_exit);
     char *temp = mp_new(max_string_length * sizeof(char));
 
     int pattern_number = 0;
     int l;
-    patterns = mp_new(max_pattern_number);
-    next = mp_new(max_pattern_number);
+    patterns = mp_new(max_pattern_number * sizeof(char *));
+    next = mp_new(max_pattern_number * sizeof(int *));
 
     FILE *output = open_file(output_filename, "w");
     FILE *f = open_file(patterns_filename, "r");
 
+    printf("patterns:\n");
     while ((l = read(f, temp)) != 0) {
         patterns[pattern_number] = mp_new(l + 1);
 
@@ -68,8 +71,17 @@ int main() {
         kmp_get_next(temp, next[pattern_number]);
 
         strcpy(patterns[pattern_number++], temp);
+
+        if (clock_duration() - cost_time > 0.01) {
+            cost_time = clock_duration();
+            printf("%d/%d %.2f%% %.2fs, %.2fs left\r", pattern_number,
+                   max_pattern_number,
+                   (double)pattern_number / max_pattern_number * 100, cost_time,
+                   cost_time * max_pattern_number / pattern_number - cost_time);
+        }
     }
     fclose(f);
+    printf("\npatterns read ok\n");
 
     count = mp_new(pattern_number * sizeof(int));
     pos = mp_new(pattern_number * sizeof(int));
@@ -79,6 +91,7 @@ int main() {
 
     compare_init();
 
+    int file_pos = 0;
     f = open_file(string_filename, "r");
     char c;
     while (1) {
@@ -88,6 +101,15 @@ int main() {
         }
         for (int i = 0; i < pattern_number; ++i) {
             match(c, i);
+        }
+
+        ++file_pos;
+        if (clock_duration() - cost_time > 0.01) {
+            cost_time = clock_duration();
+            printf("%d/%d %.2f%% %.2fs, %.2fs left\r", file_pos,
+                   string_file_byte, (double)file_pos / string_file_byte * 100,
+                   cost_time,
+                   cost_time * string_file_byte / file_pos - cost_time);
         }
     }
     fclose(f);
@@ -99,7 +121,10 @@ int main() {
         fprintf(output, "%s\t%d\n", patterns[i], count[i]);
     }
 
+    fprintf(output, "%10.2f %10lld\n", (double)mp_get_length() / 1024,
+            compare_number);
     printf("%f s\n", clock_duration());
+    mp_info();
     fclose(output);
     return 0;
 }
