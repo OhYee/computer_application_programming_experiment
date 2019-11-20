@@ -14,9 +14,10 @@ void kmp_get_next(char *s, int *next) {
 }
 
 void kmp_char(char c, char *pattern, int *pattern_pos, int *next, int *ans) {
-    while (*pattern_pos != -1 && c != pattern[*pattern_pos])
+    while (*pattern_pos != -1 && compare_char(c, pattern[*pattern_pos]) != 0) {
         *pattern_pos = next[*pattern_pos];
-    if (pattern[++(*pattern_pos)] == '\0') {
+    }
+    if (compare_char(pattern[++(*pattern_pos)], '\0') == 0) {
         ++(*ans);
         *pattern_pos =
             next[*pattern_pos - 1] + (next[*pattern_pos - 1] == 0 ? 0 : 1);
