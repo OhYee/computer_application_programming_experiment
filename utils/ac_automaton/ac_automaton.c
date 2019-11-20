@@ -1,5 +1,7 @@
 #include "ac_automaton.h"
 
+extern uint64_t compare_number;
+
 int char2int(char c) { return c > 0 ? c : c + 256; }
 
 ac_automaton *ac_init() {
@@ -14,6 +16,7 @@ ac_tree_node *ac_add(ac_automaton *ac, char *s) {
 }
 void ac_build(ac_automaton *ac) {
     ac->root->failed = ac->root;
+    ac->root->next = ac->root;
     ac->queue = lk_init();
 
     lk_add(ac->queue, ac->root);
@@ -38,6 +41,12 @@ void ac_build(ac_automaton *ac) {
                 } else {
                     child->failed = ptr;
                 }
+
+                if (child->failed->is_pattern_end == T) {
+                    child->next = child->failed;
+                } else {
+                    child->next = child->failed->next;
+                }
             }
         }
     }
@@ -45,15 +54,18 @@ void ac_build(ac_automaton *ac) {
 
 void ac_match_char(ac_automaton *ac, char c) {
     int idx = char2int(c);
+    ++compare_number;
     while (ac->match->children[idx] == NULL && ac->match != ac->root) {
         ac->match = ac->match->failed;
+        ++compare_number;
     }
     if (ac->match->children[idx] != NULL) {
         ac->match = ac->match->children[idx];
         ac_tree_node *p = ac->match;
         while (p != ac->root) {
             ++p->match_number;
-            p = p->failed;
+            p = p->next;
+            ++compare_number;
         }
     }
 }
@@ -63,9 +75,10 @@ void ac_print(ac_automaton *ac) { ac_tree_node_print(ac->root, NULL, 0); }
 ac_tree_node *ac_tree_node_init(char value) {
     ac_tree_node *actn = mp_new(sizeof(ac_tree_node));
     actn->children = mp_new(256 * sizeof(ac_tree_node *));
-    // actn->is_pattern_end = F;
+    actn->is_pattern_end = F;
     // actn->value = value;
     actn->failed = NULL;
+    actn->next = NULL;
     actn->match_number = 0;
     memset(actn->children, 0, 256 * sizeof(ac_tree_node *));
     return actn;
@@ -80,7 +93,7 @@ ac_tree_node *ac_tree_node_add(ac_tree_node *actn, char *s) {
         actn->children[idx] = ac_tree_node_init(*s);
     }
     if (compare_char('\0', *(s + 1)) == 0) {
-        // actn->children[idx]->is_pattern_end = T;
+        actn->children[idx]->is_pattern_end = T;
         return actn->children[idx];
     }
     return ac_tree_node_add(actn->children[idx], s + 1);

@@ -17,8 +17,9 @@ struct _ac_tree_node {
     // char           value;
     ac_tree_node **children;
     ac_tree_node * failed;
-    // boolean       is_pattern_end;
-    int match_number;
+    ac_tree_node * next; // 使用next可以提速25%,内存并没有多很多
+    boolean        is_pattern_end;
+    int            match_number;
 };
 
 ac_automaton *ac_init();
