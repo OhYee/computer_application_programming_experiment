@@ -18,18 +18,19 @@ void sort(int l, int r, void *args, sort_compare_function compare,
         }
 
         while (left < right) {
-            while (left < right && compare(args, right, mid) >= 0) {
+            while (left < right && mid < right &&
+                   compare(args, mid, right) < 0) {
                 right--;
             }
-            if (left < right) {
+            if (left < right && mid < right) {
                 swap(args, left++, right);
                 mid = right;
             }
-            while (left < right && compare(args, left, mid) < 0) {
+            while (left < right && left < mid && compare(args, left, mid) < 0) {
                 left++;
             }
-            if (left < right) {
-                swap(args, right--, left);
+            if (left < right && left < mid) {
+                swap(args, left, right--);
                 mid = left;
             }
         }
