@@ -4,7 +4,7 @@ int              _radix_node_number = 0;
 int              _radix_strmem = 0;
 int              _radix_nodemem = 0;
 int              _radix_strnum = 0;
-extern long long compare_number;
+extern uint64_t compare_number;
 
 int pow2(int m) {
     switch (m) {

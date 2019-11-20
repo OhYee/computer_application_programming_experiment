@@ -14,8 +14,8 @@ const char *words_filename = "../test/words-98w.txt";
 #endif
 const char *output_filename = "./result.txt";
 
-extern long long compare_number;
-extern int       _radix_node_number;
+extern uint64_t compare_number;
+extern int      _radix_node_number;
 
 #define k (2)
 #define m (4)
@@ -66,9 +66,11 @@ int main() {
     }
     fclose(f);
 
-    fprintf(output, "%10d %10.2f %10lld %7d %7d\n", _radix_node_number,
-            (double)mp_get_length() / 1024, compare_number, word_number,
-            word_exist_number);
+    fprintf(output,
+            "%10d %10.2f "
+            "%" PRIu64 " %7d %7d\n",
+            _radix_node_number, (double)mp_get_length() / 1024, compare_number,
+            word_number, word_exist_number);
     printf("%f s\n", clock_duration());
 
     // extern int _bits_string_num;
@@ -81,7 +83,8 @@ int main() {
     // extern int _radix_nodemem;
     // extern int _radix_strnum;
 
-    // printf("%d\n%d %d %d %d\n%d %d %d %d\n%d\n", memory_length, _bits_string_num,
+    // printf("%d\n%d %d %d %d\n%d %d %d %d\n%d\n", memory_length,
+    // _bits_string_num,
     //        _bits_string_mem, _bits_num, _bits_mem, _radix_node_number,
     //        _radix_strmem, _radix_nodemem, _radix_strnum,sizeof(bits));
 

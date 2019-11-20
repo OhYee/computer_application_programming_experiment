@@ -4,7 +4,7 @@ int              _avl_tree_node_number = 0;
 int              _avl_tree_strmem = 0;
 int              _avl_tree_nodemem = 0;
 int              _avl_tree_strnum = 0;
-extern long long compare_number;
+extern uint64_t compare_number;
 
 avl_tree_node *avl_tn_init(void *value, int size) {
     ++_avl_tree_node_number;

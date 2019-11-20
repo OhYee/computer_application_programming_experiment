@@ -14,8 +14,8 @@ const char *words_filename = "../test/words-98w.txt";
 #endif
 const char *output_filename = "./result.txt";
 
-extern long long compare_number;
-extern int       _avl_tree_node_number;
+extern uint64_t compare_number;
+extern int      _avl_tree_node_number;
 
 #define max_pattern_number (1280000)
 #define max_string_length (256)
@@ -61,9 +61,11 @@ int main() {
     }
     fclose(f);
 
-    fprintf(output, "%10d %10.2f %10lld %7d %7d\n", _avl_tree_node_number,
-            (double)mp_get_length() / 1024, compare_number / 1000, word_number,
-            word_exist_number);
+    fprintf(output,
+            "%10d %10.2f "
+            "%" PRIu64 " %7d %7d\n",
+            _avl_tree_node_number, (double)mp_get_length() / 1024,
+            compare_number / 1000, word_number, word_exist_number);
     printf("%f s\n", clock_duration());
     fclose(output);
     return 0;

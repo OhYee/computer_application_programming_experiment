@@ -14,7 +14,7 @@ static const int hash_table_size = 1 << 16;
          (sizeof(link *) + sizeof(linked_node) + max_string_length) +          \
      10000)
 
-extern long long compare_number;
+extern uint64_t compare_number;
 
 boolean compare(void *a, void *b) {
     return compare_string((char *)(a), (char *)(b)) == 0;
@@ -109,8 +109,11 @@ int main(int argc, char **argv) {
     }
     fclose(f);
 
-    fprintf(output, "%10.2f %10lld %7d %7d\n", (double)mp_get_length() / 1024,
-            compare_number, word_number, word_exist_number);
+    fprintf(output,
+            "%10.2f "
+            "%" PRIu64 " %7d %7d\n",
+            (double)mp_get_length() / 1024, compare_number, word_number,
+            word_exist_number);
     printf("%f s\n", clock_duration());
     fclose(output);
     return 0;

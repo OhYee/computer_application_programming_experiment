@@ -1,4 +1,5 @@
 #include "bplus_tree.h"
+#include <string.h>
 
 // index is the min value or the max value
 #define MIN_VALUE
@@ -6,7 +7,7 @@
 int              _bplus_node_number = 0;
 int              _bplus_node_mem = 0;
 int              _bplus_string_mem = 0;
-extern long long compare_number;
+extern uint64_t compare_number;
 
 bplus_tree_node *bptn_init(int max_length) {
     ++_bplus_node_number;

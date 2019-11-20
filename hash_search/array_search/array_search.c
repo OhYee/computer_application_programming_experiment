@@ -12,7 +12,7 @@ const char *output_filename = "./result.txt";
     (max_pattern_number * (sizeof(linked_node *) + 256) +                      \
      (max_string_length * sizeof(char)) + 10000)
      
-extern long long compare_number;
+extern uint64_t compare_number;
 
 boolean compare(void *a, void *b) {
     return compare_string((char *)(a), (char *)(b)) == 0;
@@ -54,8 +54,11 @@ int main() {
     }
     fclose(f);
 
-    fprintf(output, "%10.2f %10lld %7d %7d\n", (double)mp_get_length() / 1024,
-            compare_number, word_number, word_exist_number);
+    fprintf(output,
+            "%10.2f "
+            "%" PRIu64 " %7d %7d\n",
+            (double)mp_get_length() / 1024, compare_number, word_number,
+            word_exist_number);
     printf("%f s\n", clock_duration());
     fclose(output);
     return 0;
