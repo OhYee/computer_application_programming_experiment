@@ -1,4 +1,4 @@
-FOLDERS = strstr kmp ac
+FOLDERS = strstr multikmp ac_auto
 
 build clean:
 	@for folder in $(FOLDERS) ; do \
