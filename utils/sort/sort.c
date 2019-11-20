@@ -6,6 +6,17 @@ void sort(int l, int r, void *args, sort_compare_function compare,
         int left = l;
         int right = r;
         int mid = l;
+
+        int a = compare(args, l, r), b = compare(args, l, (l + r) / 2),
+            c = compare(args, (l + r) / 2, r);
+        if (a == b && b == c) {
+            mid = (l + r) / 2;
+        } else if (a == c) {
+            mid = l;
+        } else {
+            mid = r;
+        }
+
         while (left < right) {
             while (left < right && compare(args, right, mid) >= 0) {
                 right--;
