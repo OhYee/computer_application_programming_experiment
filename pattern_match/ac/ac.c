@@ -14,13 +14,13 @@ const char *string_filename = "../test/string.txt";
 #endif
 const char *output_filename = "./result.txt";
 
-extern long long compare_number;
-extern int       _avl_tree_node_number;
+extern uint64_t compare_number;
+extern int      _avl_tree_node_number;
 
 #define string_file_byte (919943484)
 #define max_pattern_number (2256700)
 #define max_string_length (256)
-#define memory_length ((size_type)1 << 35)
+#define memory_length ((size_type_big)1 << 33)
 // (max_pattern_number * max_string_length + (sizeof(ac_tree_node *) * 257) +
 //  sizeof(ac_automaton))
 
@@ -84,23 +84,29 @@ int main() {
 
     int file_pos = 0;
     f = open_file(string_filename, "r");
-    char c;
-    while (1) {
-        c = fgetc(f);
-        if (c == EOF) {
-            break;
-        }
-        ac_match_char(ac, c);
 
-        ++file_pos;
-        if (clock_duration() - cost_time > 0.01) {
-            cost_time = clock_duration();
-            printf("%d/%d %.2f%% %.2fs, %.2fs left\r", file_pos,
-                   string_file_byte, (double)file_pos / string_file_byte * 100,
-                   cost_time,
-                   cost_time * string_file_byte / file_pos - cost_time);
+    int   buf_size = 1 << 20;
+    char *buf = mp_new(buf_size);
+
+    while (!feof(f)) {
+        fread(buf, buf_size, 1, f);
+        char *c = buf;
+        while (*c != '\0') {
+            ac_match_char(ac, *c);
+            ++c;
+
+            ++file_pos;
+            if (clock_duration() - cost_time > 0.01) {
+                cost_time = clock_duration();
+                printf("%d/%d %.2f%% %.2fs, %.2fs left\r", file_pos,
+                       string_file_byte,
+                       (double)file_pos / string_file_byte * 100, cost_time,
+                       cost_time * string_file_byte / file_pos - cost_time);
+            }
         }
     }
+    printf("\n");
+
     fclose(f);
 
     void *args[] = {patterns, nodes};
@@ -110,8 +116,10 @@ int main() {
         fprintf(output, "%s\t%d\n", patterns[i], nodes[i]->match_number);
     }
 
-    fprintf(output, "%10.2f %10lld\n", (double)mp_get_length() / 1024,
-            compare_number);
+    fprintf(output,
+            "%10.2f "
+            "%" PRIu64 "\n",
+            (double)mp_get_length() / 1024, compare_number);
     printf("%f s\n", clock_duration());
     mp_info();
     fclose(output);
