@@ -2,6 +2,7 @@
 #include "../radix_tree.h"
 #include <memory.h>
 
+uint64_t compare_number = 0;
 int main() {
     mp_init(1 << 30, mp_exit);
     boolean pass = T;

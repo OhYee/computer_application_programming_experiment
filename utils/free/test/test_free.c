@@ -10,7 +10,6 @@ int  main() {
     mp_init(16 * sizeof(int), &err);
 
     int *array_1 = (int *)mp_new(sizeof(int) * 8);
-
     for (int i = 0; i < 8; ++i) {
         array_1[i] = i;
     }
@@ -40,7 +39,7 @@ int  main() {
     }
 
     if (pass) {
-        print_ok("\033[1;32mAll testcase passed\033[0m\n");
+        print_ok("All testcase passed\n");
         return 0;
     } else {
         print_err("Some error\n");

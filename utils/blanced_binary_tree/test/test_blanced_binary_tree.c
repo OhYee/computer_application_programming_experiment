@@ -1,7 +1,8 @@
 #include "../../print/print.h"
 #include "../blanced_binary_tree.h"
 
-int compare(void *a, void *b) {
+uint64_t compare_number = 0;
+int      compare(void *a, void *b) {
     int *aa = (int *)a;
     int *bb = (int *)b;
     if (*aa == *bb) {
@@ -22,26 +23,26 @@ int *num_init(int a) {
 int main() {
     mp_init(1 << 16, mp_exit);
     avl_tree *at = at_init(compare);
-    at_add(at, 3, sizeof(int));
-    at_add(at, 2, sizeof(int));
-    at_add(at, 5, sizeof(int));
-    at_add(at, 7, sizeof(int));
-    at_add(at, 1, sizeof(int));
-    at_add(at, 4, sizeof(int));
-    at_add(at, 9, sizeof(int));
-    at_add(at, 6, sizeof(int));
-    at_add(at, 1, sizeof(int));
-    at_add(at, 1, sizeof(int));
-    at_add(at, 8, sizeof(int));
-    at_add(at, 1, sizeof(int));
-    at_add(at, 1, sizeof(int));
-    at_add(at, 2, sizeof(int));
-    at_add(at, 1, sizeof(int));
-    at_add(at, 1, sizeof(int));
-    at_add(at, 1, sizeof(int));
-    at_add(at, 1, sizeof(int));
-    at_add(at, 1, sizeof(int));
-    at_add(at, 1, sizeof(int));
+    at_add(at, num_init(3), sizeof(int));
+    at_add(at, num_init(2), sizeof(int));
+    at_add(at, num_init(5), sizeof(int));
+    at_add(at, num_init(7), sizeof(int));
+    at_add(at, num_init(1), sizeof(int));
+    at_add(at, num_init(4), sizeof(int));
+    at_add(at, num_init(9), sizeof(int));
+    at_add(at, num_init(6), sizeof(int));
+    at_add(at, num_init(1), sizeof(int));
+    at_add(at, num_init(1), sizeof(int));
+    at_add(at, num_init(8), sizeof(int));
+    at_add(at, num_init(1), sizeof(int));
+    at_add(at, num_init(1), sizeof(int));
+    at_add(at, num_init(2), sizeof(int));
+    at_add(at, num_init(1), sizeof(int));
+    at_add(at, num_init(1), sizeof(int));
+    at_add(at, num_init(1), sizeof(int));
+    at_add(at, num_init(1), sizeof(int));
+    at_add(at, num_init(1), sizeof(int));
+    at_add(at, num_init(1), sizeof(int));
 
     at_print(at);
 

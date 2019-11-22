@@ -28,8 +28,12 @@ PROGRAM_PATH = $(OUTPUT_DIR)$(PROGRAM)
 ifeq ($(SYSTEM),WINDOWS)
 	CC = x86_64-w64-mingw32-gcc
 	PROGRAM = $(MAIN_FILE).exe
-else ifeq ($(TEST),)
-	# CFLAGS += -m32
+endif
+
+ifeq ($(S64),)
+	CFLAGS += -m32
+else
+	CFLAGS += -m64
 endif
 
 PWD = `pwd`

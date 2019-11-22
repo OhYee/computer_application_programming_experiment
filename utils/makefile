@@ -1,7 +1,17 @@
-include make_utils.mk
+UTILS_FOLDERS = $(shell ls . -F | grep "\/")
 
-test:
-	$(MAKE) -C compare test
+test: run
 
-clean:
-	$(MAKE) -C compare clean
+run:
+	@for folder in $(UTILS_FOLDERS) ; do \
+		if [ -d ./$$folder/test ]; then \
+		echo -e "\n$$folder" && make -C ./$$folder/ -s $@; \
+		fi;\
+	done
+
+clean build:
+	@for folder in $(UTILS_FOLDERS) ; do \
+		if [ -d ./$$folder/test ]; then \
+			make -C ./$$folder/ -s $@; \
+		fi;\
+	done

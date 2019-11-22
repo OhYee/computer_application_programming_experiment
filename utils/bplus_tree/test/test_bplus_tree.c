@@ -2,6 +2,7 @@
 #include "../bplus_tree.h"
 #include <memory.h>
 
+uint64_t compare_number = 0;
 int compare(void *a, void *b) {
     int aa = *(int *)a;
     int bb = *(int *)b;

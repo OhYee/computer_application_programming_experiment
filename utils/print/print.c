@@ -46,7 +46,7 @@ int print_err(char *fmt, ...) {
     va_list args;
     va_start(args, fmt);
     begin(RED);
-    int ret = vfprintf(stdout, fmt, args);
+    int ret = vfprintf(stderr, fmt, args);
     end();
     va_end(args);
     return ret;

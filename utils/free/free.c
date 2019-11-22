@@ -78,7 +78,7 @@ size_type_big mp_get_max_length() {
 void *mp_new(size_type_small length) {
     int bucket;
     for (bucket = 0; bucket < mp.bucket_number; ++bucket) {
-        if (mp.length[bucket] + length < mp.max_length[bucket]) {
+        if (mp.length[bucket] + length <= mp.max_length[bucket]) {
             void *ptr = mp.head[bucket] + mp.length[bucket];
             mp.length[bucket] += length;
             return ptr;
