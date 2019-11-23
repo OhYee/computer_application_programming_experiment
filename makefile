@@ -6,7 +6,7 @@ test: build
 
 build:
 	@for folder in $(FOLDERS) ; do \
-		make -C ./$$folder/ -s run;\
+		make -C ./$$folder/ -s $@;\
 	done\
 
 clean:
