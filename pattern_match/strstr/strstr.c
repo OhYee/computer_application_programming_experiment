@@ -62,8 +62,14 @@ void match(char c, int index) {
 }
 
 int compare(void *args, int i, int j) {
-    int *args_count = (int *)(((void **)args)[1]);
-    return args_count[j] - args_count[i];
+    char **args_patterns = (char **)(((void **)args)[0]);
+    int *  args_count = (int *)(((void **)args)[1]);
+
+    int res = args_count[j] - args_count[i];
+    if (res != 0) {
+        res = compare_string(args_patterns[i], args_patterns[j]);
+    }
+    return res;
 }
 void swap(void *args, int i, int j) {
     char **args_patterns = (char **)(((void **)args)[0]);

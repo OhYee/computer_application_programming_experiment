@@ -9,7 +9,7 @@
 const char *patterns_filename = "../test/pattern_simple.txt";
 const char *string_filename = "../test/string_simple.txt";
 #else
-const char *patterns_filename = "../test/pattern.txt";
+const char *patterns_filename = "../test/pattern_bf_kmp.txt";
 const char *string_filename = "../test/string.txt";
 #endif
 const char *output_filename = "./result.txt";
@@ -25,8 +25,14 @@ extern int      _avl_tree_node_number;
 //  sizeof(ac_automaton))
 
 int compare(void *args, int i, int j) {
+    char **        args_patterns = (char **)(((void **)args)[0]);
     ac_tree_node **args_nodes = (ac_tree_node **)(((void **)args)[1]);
-    return args_nodes[j]->match_number - args_nodes[i]->match_number;
+
+    int res = args_nodes[j]->match_number - args_nodes[i]->match_number;
+    if (res != 0) {
+        res = compare_string(args_patterns[i], args_patterns[j]);
+    }
+    return res;
 }
 void swap(void *args, int i, int j) {
     char **        args_patterns = (char **)(((void **)args)[0]);
@@ -109,8 +115,10 @@ int main() {
 
     fclose(f);
 
+    int   compare_number_backup = compare_number;
     void *args[] = {patterns, nodes};
     sort(0, pattern_number - 1, args, compare, swap);
+    compare_number = compare_number_backup;
 
     for (int i = 0; i < pattern_number; ++i) {
         fprintf(output, "%s\t%d\n", patterns[i], nodes[i]->match_number);
