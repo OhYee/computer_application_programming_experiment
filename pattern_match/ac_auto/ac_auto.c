@@ -9,7 +9,7 @@
 const char *patterns_filename = "../test/pattern_simple.txt";
 const char *string_filename = "../test/string_simple.txt";
 #else
-const char *patterns_filename = "../test/pattern_bf_kmp.txt";
+const char *patterns_filename = "../test/pattern.txt";
 const char *string_filename = "../test/string.txt";
 #endif
 const char *output_filename = "./result.txt";

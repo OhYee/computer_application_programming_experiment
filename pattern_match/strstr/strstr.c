@@ -15,12 +15,12 @@ const char *string_filename = "../test/string.txt";
 const char *output_filename = "./result.txt";
 
 extern uint64_t compare_number;
-extern int       _avl_tree_node_number;
+extern int      _avl_tree_node_number;
 
 #define string_file_byte (919943484)
 #define max_pattern_number (2256700)
 #define max_string_length (256)
-#define memory_length (max_pattern_number * max_string_length) +(1<<29)
+#define memory_length (max_pattern_number * max_string_length) + (1 << 29)
 
 char **patterns;
 int *  count;
