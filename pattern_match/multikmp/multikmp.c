@@ -32,13 +32,13 @@ void match(char c, int index) {
 }
 
 int compare(void *args, int i, int j) {
-    // char **args_patterns = (char **)(((void **)args)[0]);
+    char **args_patterns = (char **)(((void **)args)[0]);
     int *  args_count = (int *)(((void **)args)[1]);
 
     int res = args_count[j] - args_count[i];
-    // if (res != 0) {
-        // res = compare_string(args_patterns[i], args_patterns[j]);
-    // }
+    if (res == 0) {
+        res = compare_string(args_patterns[i], args_patterns[j]);
+    }
     return res;
 }
 void swap(void *args, int i, int j) {
@@ -56,7 +56,7 @@ void swap(void *args, int i, int j) {
 
 int main() {
     clock_start();
-    double cost_time = 0;
+    // double cost_time = 0;
 
     mp_init(memory_length, mp_exit);
     char *temp = mp_new(max_string_length * sizeof(char));
@@ -78,13 +78,13 @@ int main() {
 
         strcpy(patterns[pattern_number++], temp);
 
-        if (clock_duration() - cost_time > 0.01) {
-            cost_time = clock_duration();
-            printf("%d/%d %.2f%% %.2fs, %.2fs left\r", pattern_number,
-                   max_pattern_number,
-                   (double)pattern_number / max_pattern_number * 100, cost_time,
-                   cost_time * max_pattern_number / pattern_number - cost_time);
-        }
+        // if (clock_duration() - cost_time > 0.01) {
+        //     cost_time = clock_duration();
+        //     printf("%d/%d %.2f%% %.2fs, %.2fs left\r", pattern_number,
+        //            max_pattern_number,
+        //            (double)pattern_number / max_pattern_number * 100, cost_time,
+        //            cost_time * max_pattern_number / pattern_number - cost_time);
+        // }
     }
     fclose(f);
     printf("\npatterns read ok\n");
@@ -97,7 +97,7 @@ int main() {
 
     compare_init();
 
-    int file_pos = 0;
+    // int file_pos = 0;
     f = open_file(string_filename, "r");
 
     int   buf_size = 1 << 20;
@@ -113,14 +113,14 @@ int main() {
 
             ++c;
 
-            ++file_pos;
-            if (clock_duration() - cost_time > 0.01) {
-                cost_time = clock_duration();
-                printf("%d/%d %.2f%% %.2fs, %.2fs left\r", file_pos,
-                       string_file_byte,
-                       (double)file_pos / string_file_byte * 100, cost_time,
-                       cost_time * string_file_byte / file_pos - cost_time);
-            }
+            // ++file_pos;
+            // if (clock_duration() - cost_time > 0.01) {
+            //     cost_time = clock_duration();
+            //     printf("%d/%d %.2f%% %.2fs, %.2fs left\r", file_pos,
+            //            string_file_byte,
+            //            (double)file_pos / string_file_byte * 100, cost_time,
+            //            cost_time * string_file_byte / file_pos - cost_time);
+            // }
         }
     }
     fclose(f);
