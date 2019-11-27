@@ -86,7 +86,7 @@ void swap(void *args, int i, int j) {
 
 int main() {
     clock_start();
-    // double cost_time = 0;
+    double cost_time = 0;
 
     mp_init(memory_length, mp_exit);
     char *temp = mp_new(max_string_length * sizeof(char));
@@ -116,7 +116,7 @@ int main() {
 
     compare_init();
 
-    // int file_pos = 0;
+    int file_pos = 0;
     f = open_file(string_filename, "r");
 
     int   buf_size = 1 << 29;
@@ -137,20 +137,22 @@ int main() {
 
             ++c;
 
-            // ++file_pos;
-            // if (clock_duration() - cost_time > 0.01) {
-            //     cost_time = clock_duration();
-            //     printf("%d/%d %.2f%% %.2fs, %.2fs left\r", file_pos,
-            //            string_file_byte,
-            //            (double)file_pos / string_file_byte * 100, cost_time,
-            //            cost_time * string_file_byte / file_pos - cost_time);
-            // }
+            ++file_pos;
+            if (clock_duration() - cost_time > 0.01) {
+                cost_time = clock_duration();
+                printf("%d/%d %.2f%% %.2fs, %.2fs left\r", file_pos,
+                       string_file_byte,
+                       (double)file_pos / string_file_byte * 100, cost_time,
+                       cost_time * string_file_byte / file_pos - cost_time);
+            }
         }
     }
     fclose(f);
 
+    uint64_t compare_number_backup = compare_number;
     void *args[] = {patterns, count};
     sort(0, pattern_number - 1, args, compare, swap);
+    compare_number = compare_number_backup;
 
     for (int i = 0; i < pattern_number; ++i) {
         fprintf(output, "%s\t%d\n", patterns[i], count[i]);
@@ -159,7 +161,7 @@ int main() {
     fprintf(output,
             "%10.2f "
             "%" PRIu64 "\n",
-            (double)mp_get_length() / 1024, compare_number);
+            (double)mp_get_length() / 1024, compare_number / 1000);
     printf("%f s\n", clock_duration());
     mp_info();
     fclose(output);
