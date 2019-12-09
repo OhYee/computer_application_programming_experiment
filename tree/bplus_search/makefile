@@ -1,5 +1,5 @@
 MAIN_FILE = bplus_search
 EXTRA_DIRS = ../../utils/
-ROOT = ./
 OUTPUT_DIR = ./
+FLAGS = -m32
 include ../../utils/make_utils.mk

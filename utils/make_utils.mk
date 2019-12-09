@@ -5,9 +5,10 @@
 #
 # Make a file in source folder, and input:
 # 
-# PROGRAM := <Output file name>
+# MAIN_FILE := <Output file name>
 # EXTRA_DIRS := <Other source folder>
 # OUTPUT_DIR = <Output folder>
+# FLAGS = <Extra flags>
 # include <Path to this file>
 #
 
@@ -20,6 +21,7 @@ PS = c
 
 CC = gcc
 CFLAGS = -g -Wall --std=c99 -O3
+CFLAGS += $(FLAGS)
 
 MAIN_FILE_PATH = $(OUTPUT_DIR)$(MAIN_FILE)
 PROGRAM = $(MAIN_FILE).out
