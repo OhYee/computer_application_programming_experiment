@@ -34,10 +34,12 @@ int main() {
 
     for (int i = 0; i < sizeof(test_char) / sizeof(testcase_char); ++i) {
         testcase_char *tc = &test_char[i];
-        if (compare_char(tc->arg1, tc->arg2) != tc->want_res) {
+        int            got = compare_char(tc->arg1, tc->arg2);
+        if (got * tc->want_res < 0 || (tc->want_res == 0 && got != 0)) {
             pass = F;
-            print_err("Check error at compare_char('%c','%c')=%d\n", tc->arg1,
-                      tc->arg2, tc->want_res);
+            print_err("Check error at compare_char('%c','%c')=%d, got=%d\n",
+                      tc->arg1, tc->arg2, tc->want_res,
+                      compare_char(tc->arg1, tc->arg2));
         }
     }
 
