@@ -1,5 +1,5 @@
 MAIN_FILE = test_free
 EXTRA_DIRS = ../boolean/ ../print/ ./
 OUTPUT_DIR = ./test/
-FLAGS = -m32
+# FLAGS = -m32
 include ../make_utils.mk

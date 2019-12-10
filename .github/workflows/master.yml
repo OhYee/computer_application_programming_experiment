@@ -13,4 +13,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - run: sudo apt-get install g++-multilib
-    - run: make test -e FLAGS=-m64
+    - run: make test -e S64=1
