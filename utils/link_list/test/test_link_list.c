@@ -1,7 +1,7 @@
 #include "../../compare/compare.h"
 #include "../../free/free.h"
 #include "../../print/print.h"
-#include "../link.h"
+#include "../link_list.h"
 #include "stdio.h"
 #include <memory.h>
 
@@ -13,9 +13,9 @@ int main() {
     mp_init(1024 * 4, mp_exit);
     char *s;
 
-    link *lk = lk_init();
+    link_list *lk = lk_init();
     if (!lk_empty(lk)) {
-        print_err("link need be empty, but it seems not\n");
+        print_err("link_list need be empty, but it seems not\n");
     }
 
     s = mp_new(5 * sizeof(char));

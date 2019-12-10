@@ -43,7 +43,7 @@ int main() {
     FILE *output = open_file(output_filename, "w");
     FILE *f = open_file(patterns_filename, "r");
 
-    while (read(f, temp)) {
+    while (read_file(f, temp)) {
         rt_add(rt, temp, strlen(temp));
         // rt_print(rt);
     }
@@ -54,7 +54,7 @@ int main() {
     compare_init();
 
     f = open_file(words_filename, "r");
-    while (read(f, temp)) {
+    while (read_file(f, temp)) {
         ++word_number;
 
         if (rt_exist(rt, temp, strlen(temp))) {

@@ -1,7 +1,7 @@
 #include "../boolean/boolean.h"
 #include "../compare/compare.h"
 #include "../free/free.h"
-#include "../link/link.h"
+#include "../link_list/link_list.h"
 #include <memory.h>
 
 typedef struct _ac_automaton ac_automaton;
@@ -9,7 +9,7 @@ typedef struct _ac_tree_node ac_tree_node;
 
 struct _ac_automaton {
     ac_tree_node *root;
-    link *        queue;
+    link_list *        queue;
     ac_tree_node *match;
 };
 

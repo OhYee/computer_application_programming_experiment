@@ -1,4 +1,4 @@
-MAIN_FILE = test_link
+MAIN_FILE = test_link_lis
 EXTRA_DIRS = ./ ../boolean/ ../print/ ../compare/ ../free/
 OUTPUT_DIR = ./test/
 # FLAGS = -m32

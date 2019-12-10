@@ -23,7 +23,7 @@ int main() {
 
     mp_init(memory_length, mp_exit);
 
-    link *lk = lk_init();
+    link_list *lk = lk_init();
 
     char *temp = mp_new(max_string_length * sizeof(char));
     int   word_number = 0;
@@ -31,7 +31,7 @@ int main() {
 
     FILE *output = open_file(output_filename, "w");
     FILE *f = open_file(patterns_filename, "r");
-    while (read(f, temp)) {
+    while (read_file(f, temp)) {
         char *s = mp_new(sizeof(char *) * (strlen(temp) + 1));
         strcpy(s, temp);
         lk_add(lk, s);
@@ -39,7 +39,7 @@ int main() {
     fclose(f);
 
     f = open_file(words_filename, "r");
-    while (read(f, temp)) {
+    while (read_file(f, temp)) {
         ++word_number;
         // if (word_number % 10000 == 0)
         //     printf("%d %fs %d ok\n", word_number, clock_duration(),

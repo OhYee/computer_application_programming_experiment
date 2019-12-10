@@ -98,7 +98,7 @@ int main() {
     FILE *output = open_file(output_filename, "w");
     FILE *f = open_file(patterns_filename, "r");
 
-    while ((l = read(f, temp)) != 0) {
+    while ((l = read_file(f, temp)) != 0) {
         patterns[pattern_number] = mp_new(l + 1);
         strcpy(patterns[pattern_number++], temp);
         printf("%d/%d\r", pattern_number, 1500);
@@ -123,7 +123,7 @@ int main() {
     char *buf = mp_new(buf_size);
 
     while (!feof(f)) {
-        fread(buf, buf_size, 1, f);
+        fread_file(buf, buf_size, 1, f);
         char *c = buf;
         while (*c != '\0') {
             for (int i = max_string_length - 1; i > 0; --i) {

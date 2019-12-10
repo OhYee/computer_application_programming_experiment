@@ -11,7 +11,7 @@ static const int hash_table_size = 1 << 16;
 #define max_string_length (256)
 #define memory_length                                                          \
     (max_pattern_number *                                                      \
-         (sizeof(link *) + sizeof(linked_node) + max_string_length) +          \
+         (sizeof(link_list *) + sizeof(linked_node) + max_string_length) +          \
      10000)
 
 extern uint64_t compare_number;
@@ -21,7 +21,7 @@ boolean compare(void *a, void *b) {
 }
 
 typedef struct ht {
-    link **array;
+    link_list **array;
     int    length;
 } hash_table;
 
@@ -43,14 +43,14 @@ int hash(char *s, int limit) {
 hash_table *ht_init(int length) {
     hash_table *ht = mp_new(sizeof(hash_table));
     ht->length = length;
-    ht->array = mp_new(ht->length * sizeof(link *));
-    memset(ht->array, 0, ht->length * sizeof(link *));
+    ht->array = mp_new(ht->length * sizeof(link_list *));
+    memset(ht->array, 0, ht->length * sizeof(link_list *));
     return ht;
 }
 
 void ht_add(hash_table *ht, char *s) {
     unsigned int code = hash(s, ht->length);
-    link *       ptr = ht->array[code];
+    link_list *       ptr = ht->array[code];
 
     if (ptr == NULL) {
         ptr = ht->array[code] = lk_init();
@@ -63,7 +63,7 @@ void ht_add(hash_table *ht, char *s) {
 
 boolean ht_exist(hash_table *ht, char *s) {
     int   code = hash(s, ht->length);
-    link *ptr = ht->array[code];
+    link_list *ptr = ht->array[code];
 
     if (ptr == NULL) {
         return F;
@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
     FILE *output = open_file(output_filename, "w");
     FILE *f = open_file(patterns_filename, "r");
 
-    while (read(f, temp)) {
+    while (read_file(f, temp)) {
         ht_add(ht, temp);
     }
     fclose(f);
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
     // }
 
     f = open_file(words_filename, "r");
-    while (read(f, temp)) {
+    while (read_file(f, temp)) {
         ++word_number;
         // if (word_number % 10000 == 0)
         //     printf("%d %fs %d ok\n", word_number, clock_duration(),

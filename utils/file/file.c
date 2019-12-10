@@ -9,7 +9,7 @@ FILE *open_file(const char *filename, const char *type) {
     return f;
 }
 
-int read(FILE *f, char *s) {
+int read_file(FILE *f, char *s) {
     int   length = 0;
     char *ptr = s;
     char  c;

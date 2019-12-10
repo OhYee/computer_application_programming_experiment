@@ -42,7 +42,7 @@ void bg_set(bit_group *bg, unsigned long long pos) {
     group_type *v = bg->bits;
     v[pos >> 3] |= 1 << (pos & 7);
 }
-int bg_read(bit_group *bg, unsigned long long pos) {
+int bg_read_file(bit_group *bg, unsigned long long pos) {
     group_type *v = bg->bits;
     return v[pos >> 3] & (1 << (pos & 7));
 }
@@ -120,7 +120,7 @@ boolean bf_exist(bloom_filter *bf, char *s) {
     for (int i = 0; i < bf->hash_num; ++i) {
         int code = hash(i, s, bf->bit_length);
         // set bg code-th bit to 1
-        if (!bg_read(bf->value, code)) {
+        if (!bg_read_file(bf->value, code)) {
             exist = F;
             break;
         }
@@ -141,7 +141,7 @@ int main() {
     FILE *output = open_file(output_filename, "w");
     FILE *f = open_file(patterns_filename, "r");
 
-    while (read(f, temp)) {
+    while (read_file(f, temp)) {
         bf_add(bf, temp);
     }
     fclose(f);
@@ -155,7 +155,7 @@ int main() {
     // printf("\n");
 
     f = open_file(words_filename, "r");
-    while (read(f, temp)) {
+    while (read_file(f, temp)) {
         ++word_number;
         // if (word_number % 10000 == 0)
         //     printf("%d %fs %d ok\n", word_number, clock_duration(),

@@ -39,7 +39,7 @@ int main() {
     FILE *output = open_file(output_filename, "w");
     FILE *f = open_file(patterns_filename, "r");
 
-    while (read(f, temp)) {
+    while (read_file(f, temp)) {
         at_add(at, temp, strlen(temp) + 1);
     }
     fclose(f);
@@ -49,7 +49,7 @@ int main() {
     compare_init();
 
     f = open_file(words_filename, "r");
-    while (read(f, temp)) {
+    while (read_file(f, temp)) {
         ++word_number;
 
         if (at_search(at, temp)) {

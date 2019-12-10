@@ -70,7 +70,7 @@ int main() {
     FILE *f = open_file(patterns_filename, "r");
 
     printf("patterns:\n");
-    while ((l = read(f, temp)) != 0) {
+    while ((l = read_file(f, temp)) != 0) {
         patterns[pattern_number] = mp_new(l + 1);
 
         next[pattern_number] = mp_new(l * sizeof(int));
@@ -104,7 +104,7 @@ int main() {
     char *buf = mp_new(buf_size);
 
     while (!feof(f)) {
-        fread(buf, buf_size, 1, f);
+        fread_file(buf, buf_size, 1, f);
         char *c = buf;
         while (*c != '\0') {
             for (int i = 0; i < pattern_number; ++i) {

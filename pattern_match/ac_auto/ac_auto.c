@@ -65,7 +65,7 @@ int main() {
     double cost_time = 0;
 
     printf("patterns:\n");
-    while ((l = read(f, temp)) != 0) {
+    while ((l = read_file(f, temp)) != 0) {
         patterns[pattern_number] = mp_new(l + 1);
         strcpy(patterns[pattern_number], temp);
         nodes[pattern_number] = ac_add(ac, patterns[pattern_number]);
@@ -95,7 +95,7 @@ int main() {
     char *buf = mp_new(buf_size);
 
     while (!feof(f)) {
-        fread(buf, buf_size, 1, f);
+        fread_file(buf, buf_size, 1, f);
         char *c = buf;
         while (*c != '\0') {
             ac_match_char(ac, *c);
