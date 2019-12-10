@@ -123,7 +123,7 @@ int main() {
     char *buf = mp_new(buf_size);
 
     while (!feof(f)) {
-        fread_file(buf, buf_size, 1, f);
+        fread(buf, buf_size, 1, f);
         char *c = buf;
         while (*c != '\0') {
             for (int i = max_string_length - 1; i > 0; --i) {
