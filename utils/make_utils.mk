@@ -21,7 +21,7 @@ RM = rm -f
 PS = c
 
 CC = gcc
-CFLAGS = -g -Wall --std=c99 -O3 -lpthread
+CFLAGS = -g -Wall --std=c99 -O3 -lpthread -pthread
 CFLAGS += $(FLAGS)
 
 MAIN_FILE_PATH = $(OUTPUT_DIR)$(MAIN_FILE)
