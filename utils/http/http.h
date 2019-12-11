@@ -15,4 +15,5 @@ struct _HTML {
     char *body;
 };
 
-boolean get_page(char *ip, uint16_t port, char *reponse, int reponse_size);
+int get_page(char *prefix, char *url, char *ip, uint16_t port, char *reponse,
+             int reponse_size);

@@ -2,7 +2,8 @@
 
 #define MAX_REQUEST_LENGTH 2048
 
-boolean get_page(char *ip, uint16_t port, char *reponse, int reponse_size) {
+int get_page(char *prefix, char *url, char *ip, uint16_t port, char *reponse,
+             int reponse_size) {
     int sock = socket(AF_INET, SOCK_STREAM, 0);
 
     struct sockaddr_in serv_addr;
@@ -16,15 +17,26 @@ boolean get_page(char *ip, uint16_t port, char *reponse, int reponse_size) {
     }
 
     char request[MAX_REQUEST_LENGTH] = "\0";
-    strcat(request, "GET / HTTP/1.1\r\n");
+    strcat(request, "GET ");
+    strcat(request, prefix);
+    strcat(request, url);
+    strcat(request, " HTTP/1.1\r\n");
     strcat(request, "Host:");
     strcat(request, ip);
-    strcat(request, "\r\nConnection:Close\r\n\r\n");
+    strcat(request, "\r\nConnection:Keep-alive\r\n\r\n");
 
-    send(sock, request, sizeof(request), 0);
+    write(sock, request, sizeof(request));
 
-    recv(sock, reponse, reponse_size - 1, 0);
+    int read_length = 0;
+    while (1) {
+        int ret =
+            read(sock, reponse + read_length, reponse_size - read_length - 1);
+        if (ret <= 0) {
+            break;
+        }
+        read_length += ret;
+    }
 
     close(sock);
-    return T;
+    return read_length;
 }
