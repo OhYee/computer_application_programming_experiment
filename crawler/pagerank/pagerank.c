@@ -33,6 +33,7 @@ void swap(void *args, int i, int j) {
 }
 
 int main() {
+    clock_start();
     mp_init((size_type_big)1 << 35, mp_exit);
 
     idx2string = mp_new(sizeof(char *) * MAX_URL_NUMBER);
@@ -106,8 +107,10 @@ int main() {
     sort(0, url_number - 1, NULL, compare, swap);
 
     f = open_file("result.txt", "w");
-    for (int i = 0; i < url_number; ++i) {
+    for (int i = 0; i < 10; ++i) {
         fprintf(f, "%s %.15f\n", idx2string[i], pagerank[i]);
     }
+    fprintf(f, "%.2fs " SIZE_TYPE_BIG_FORMAT "K", clock_duration(),
+            mp_get_length() / 1024);
     fclose(f);
 }
