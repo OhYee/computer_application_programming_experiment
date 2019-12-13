@@ -1,6 +1,8 @@
 #include "../../utils/utils.h"
 #include <pcre.h>
 
+#define MAX_URL_NUMBER 337800
+
 boolean compare(void *a, void *b) {
     return compare_string((char *)(a), (char *)(b)) == 0;
 }
@@ -14,8 +16,7 @@ typedef struct _map      map;
 
 struct _map_node {
     char *    key;
-    void *    value;
-    int       index;
+    int       value;
     map_node *next;
 };
 
@@ -64,7 +65,7 @@ map_node *map_add(map *m, char *value) {
 
     map_node *node = mp_new(sizeof(map_node));
     node->key = value;
-    node->value = NULL;
+    node->value = -1;
     node->next = lst->head;
     lst->head = node->next;
 
@@ -86,12 +87,13 @@ map_node *map_get(map *m, char *value) {
     return NULL;
 }
 
-link_list *task_list; // 待爬取的页面列表
-map *      relation;  // 页面关系
-char       prefix[] = "/news.sohu.com";
-boolean    has_data;
-char **    strings;
-int        strings_num;
+link_list * task_list;  // 待爬取的页面列表
+map *       string2idx; // 页面关系
+link_list **relation;
+char        prefix[] = "/news.sohu.com";
+boolean     has_data;
+char **     strings;
+int         strings_num;
 
 char *get_url() {
     char *s = NULL;
@@ -115,31 +117,47 @@ char *get_url() {
 }
 
 void record_url(char *p, char *c, int length) {
-    char *s = NULL;
-    mp_new(sizeof(char) * (length + 1));
-    memcpy(s, c, length);
-
     map_node *kv_pair;
+    int       pid;
+    char      temp = c[length];
+    c[length] = '\0';
 
-    printf("record %s\n", s);
+    // printf("record %s\n", c);
 
-    kv_pair = map_get(relation, p);
+    kv_pair = map_get(string2idx, p);
     if (kv_pair == NULL) {
         char *pp = mp_new(sizeof(char) * (strlen(p) + 1));
-        memcpy(pp, p, length);
+        strcpy(pp, p);
 
-        kv_pair = map_add(relation, pp);
-        kv_pair->value = lk_init();
+        strings[strings_num] = pp;
+
+        kv_pair = map_add(string2idx, pp);
+        kv_pair->value = strings_num;
+        ++strings_num;
+
+        relation[kv_pair->value] = lk_init();
     }
-    lk_add(kv_pair->value, s);
+    pid = kv_pair->value;
 
-    kv_pair = map_get(relation, s);
+    kv_pair = map_get(string2idx, c);
     if (kv_pair == NULL) {
-        lk_add(task_list, s);
+        char *cc = mp_new(sizeof(char) * (length + 1));
+        memcpy(cc, c, length);
 
-        kv_pair = map_add(relation, s);
-        kv_pair->value = lk_init();
+        strings[strings_num] = cc;
+
+        kv_pair = map_add(string2idx, cc);
+        kv_pair->value = strings_num;
+        ++strings_num;
+
+        relation[kv_pair->value] = lk_init();
+
+        lk_add(task_list, cc);
     }
+
+    lk_add(relation[pid], &kv_pair->value);
+
+    c[length] = temp;
 }
 
 void *task(void *arg) {
@@ -196,27 +214,33 @@ int main() {
     int hash_length = 1 << 16;
     mp_init((size_type_big)1 << 35, mp_exit);
     task_list = lk_init();
-    relation = map_init(hash_length);
+    relation = mp_new(sizeof(link_list *) * MAX_URL_NUMBER);
+    strings = mp_new(sizeof(char *) * MAX_URL_NUMBER);
+    string2idx = map_init(hash_length);
 
     has_data = F;
 
     lk_add(task_list, "/");
 
-    thread_pool *tp = tp_new(10, 1, task);
+    thread_pool *tp = tp_new(1, 1, task);
     tp_wait(tp);
 
     printf("ok\n");
 
-    int count = 0;
-    for (int i = 0; i < relation->length; ++i) {
-        if (relation->hash_table[i] != NULL) {
-            map_node *ptr = relation->hash_table[i]->head;
-            while (ptr != NULL) {
-                printf("%s %d\n", ptr->key, count++);
-                ptr = ptr->value;
-            }
+    FILE *f = open_file("result.txt", "w");
+    for (int i = 0; i < strings_num; ++i) {
+        fprintf(f, "%s %d\n", strings[i], i);
+    }
+    fprintf(f, "\n");
+    for (int i = 0; i < strings_num; ++i) {
+        linked_node *ptr = relation[i]->head;
+        while (ptr != NULL) {
+            fprintf(f, "%d %d\n", i, *(int *)ptr->value);
+            ptr = ptr->next;
         }
     }
-
+    fprintf(f, "%.2fs " SIZE_TYPE_BIG_FORMAT "K", clock_duration(),
+            mp_get_length() / 1024);
+    fclose(f);
     return 0;
 }
