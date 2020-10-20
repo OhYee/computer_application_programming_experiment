@@ -4,9 +4,9 @@
 // index is the min value or the max value
 #define MIN_VALUE
 
-int              _bplus_node_number = 0;
-int              _bplus_node_mem = 0;
-int              _bplus_string_mem = 0;
+int             _bplus_node_number = 0;
+int             _bplus_node_mem = 0;
+int             _bplus_string_mem = 0;
 extern uint64_t compare_number;
 
 bplus_tree_node *bptn_init(int max_length) {
@@ -40,7 +40,7 @@ int bptn_add_to_node(bplus_tree_node *bptn, void *value,
 
     for (i = bptn->num; i >= 1; --i) {
         int res = compare(value, bptn->keys[i - 1]);
-        if (res == 1) {
+        if (res > 0) {
             break;
         } else {
             bptn->keys[i] = bptn->keys[i - 1];
